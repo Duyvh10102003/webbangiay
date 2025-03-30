@@ -18,6 +18,11 @@ class ShoeApiController
     {
         header('Content-Type: application/json');
         $shoes = $this->shoeModel->getAllShoes();
+        // foreach ($shoes as &$shoe) {
+        //     // Format giá thành tiền Việt Nam Đồng (VND)
+        //     $shoe['price'] = number_format($shoe['price'], 0, ',', '.') . ' ₫';
+
+        // }
         echo json_encode($shoes);
     }
 
