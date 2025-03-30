@@ -857,3 +857,8 @@ h1,h2,h3,h4,h5,h6 {
 .aos-animate .txt-fx.zoom .letter {
   transform: scale(1);
 }
+.col-1 {
+  display: flex;
+  justify-content: flex-end; /* Căn phải */
+  align-items: center; /* Căn giữa theo chiều dọc */
+}
