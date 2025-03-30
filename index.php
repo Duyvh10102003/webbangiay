@@ -15,35 +15,35 @@ $controllerName = isset($url[0]) && $url[0] != '' ? ucfirst($url[0]) . 'Controll
 $action = isset($url[1]) && $url[1] != '' ? $url[1] : 'index';
 
 // Xử lý API riêng biệt
-if ($url[0] === 'api') {
-    $apiController = new AuthApiController();
-    $method = $_SERVER['REQUEST_METHOD'];
+// if ($url[0] === 'api') {
+//     $apiController = new AuthApiController();
+//     $method = $_SERVER['REQUEST_METHOD'];
 
-    switch ($url[1] ?? '') {
-        case 'register':
-            if ($method === 'POST') {
-                $apiController->register();
-            } else {
-                http_response_code(405);
-                echo json_encode(['message' => 'Method Not Allowed']);
-            }
-            exit;
+//     switch ($url[1] ?? '') {
+//         case 'register':
+//             if ($method === 'POST') {
+//                 $apiController->register();
+//             } else {
+//                 http_response_code(405);
+//                 echo json_encode(['message' => 'Method Not Allowed']);
+//             }
+//             exit;
 
-        case 'login':
-            if ($method === 'POST') {
-                $apiController->login();
-            } else {
-                http_response_code(405);
-                echo json_encode(['message' => 'Method Not Allowed']);
-            }
-            exit;
+//         case 'login':
+//             if ($method === 'POST') {
+//                 $apiController->login();
+//             } else {
+//                 http_response_code(405);
+//                 echo json_encode(['message' => 'Method Not Allowed']);
+//             }
+//             exit;
 
-        default:
-            http_response_code(404);
-            echo json_encode(['message' => 'API not found']);
-            exit;
-    }
-}
+//         default:
+//             http_response_code(404);
+//             echo json_encode(['message' => 'API not found']);
+//             exit;
+//     }
+// }
 
 // Định tuyến các yêu cầu API
 if ($controllerName === 'ApiController' && isset($url[1])) {
