@@ -2,15 +2,11 @@
 <html lang="en">
 
 <head>
-  <?php
-  include 'inc/head.php';
-  ?>
-
+  <?php include 'inc/head.php'; ?>
 </head>
 
 <body>
-
-<?php
+  <?php
   include 'inc/header.php';
   include 'inc/icon.php';
   ?>
@@ -19,7 +15,6 @@
     <div class="preloader">
     </div>
   </div>
-
   <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart">
     <div class="offcanvas-header justify-content-center">
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -80,17 +75,12 @@
       </div>
     </div>
   </div>
-
-  
-
   <section>
     <div>
       <div
         class="slideshow slide-in arrow-absolute text-white" style="height: 70vh;">
         <div class="swiper-wrapper">
-
           <div class="swiper-slide jarallax swiper-slide-next">
-
             <img src="../images/slide-2.jpg" class="jarallax-img" alt="slideshow">
             <div class="banner-content w-100">
               <div class="container-fluid">
@@ -101,10 +91,8 @@
                 </div>
               </div>
             </div>
-
           </div>
           <div class="swiper-slide jarallax">
-
             <img src="../images/slide-3.jpg" class="jarallax-img" alt="slideshow">
             <div class="banner-content w-100">
               <div class="container-fluid">
@@ -115,11 +103,8 @@
                 </div>
               </div>
             </div>
-
           </div>
-
           <div class="swiper-slide jarallax">
-
             <img src="../images/slide-4.jpg" class="jarallax-img" alt="slideshow">
             <div class="banner-content w-100">
               <div class="container-fluid">
@@ -130,9 +115,7 @@
                 </div>
               </div>
             </div>
-
           </div>
-
         </div>
         <div class="pagination-wrapper position-absolute">
           <div class="container">
@@ -251,7 +234,6 @@
             .then(data => {
               let productContainer = document.getElementById("product-container");
               productContainer.innerHTML = ""; // Xóa nội dung cũ
-
               data.forEach(product => {
                 let formattedPrice = new Intl.NumberFormat("vi-VN", {
                   style: "currency",
@@ -273,7 +255,6 @@
                         </div>
                     </div>
                 </div>`;
-
                 productContainer.innerHTML += productItem;
               });
             })
@@ -282,13 +263,6 @@
       </script>
     </div>
   </section>
-
-
-
-
-
-
-
 
   <section class="py-5">
     <div class="container-fluid">
@@ -387,10 +361,7 @@
     </div>
   </section>
 
-  <?php
-  include 'inc/footer.php';
-  ?>
-
+  <?php include 'inc/footer.php'; ?>
   <script src="../js/jquery-1.11.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
@@ -399,5 +370,4 @@
   <script src="../js/plugins.js"></script>
   <script src="../js/script.js"></script>
 </body>
-
 </html>

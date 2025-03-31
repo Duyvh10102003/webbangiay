@@ -14,82 +14,54 @@ $controllerName = isset($url[0]) && $url[0] != '' ? ucfirst($url[0]) . 'Controll
 // Kiểm tra phần thứ hai của URL để xác định action
 $action = isset($url[1]) && $url[1] != '' ? $url[1] : 'index';
 
-// Xử lý API riêng biệt
-// if ($url[0] === 'api') {
-//     $apiController = new AuthApiController();
-//     $method = $_SERVER['REQUEST_METHOD'];
-
-//     switch ($url[1] ?? '') {
-//         case 'register':
-//             if ($method === 'POST') {
-//                 $apiController->register();
-//             } else {
-//                 http_response_code(405);
-//                 echo json_encode(['message' => 'Method Not Allowed']);
-//             }
-//             exit;
-
-//         case 'login':
-//             if ($method === 'POST') {
-//                 $apiController->login();
-//             } else {
-//                 http_response_code(405);
-//                 echo json_encode(['message' => 'Method Not Allowed']);
-//             }
-//             exit;
-
-//         default:
-//             http_response_code(404);
-//             echo json_encode(['message' => 'API not found']);
-//             exit;
-//     }
-// }
-
 // Định tuyến các yêu cầu API
-if ($controllerName === 'ApiController' && isset($url[1])) {
+if ($url[0] === 'api') {
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    if ($url[1] === 'register' || $url[1] === 'login') {
+        $apiController = new AuthApiController();
+
+        if ($url[1] === 'register' && $method === 'POST') {
+            $apiController->register();
+        } elseif ($url[1] === 'login' && $method === 'POST') {
+            $apiController->login();
+        } else {
+            http_response_code(405);
+            echo json_encode(['message' => 'Method Not Allowed']);
+        }
+        exit;
+    }
+
+    // Định tuyến API khác (ShoeApiController, UserApiController,...)
     $apiControllerName = ucfirst($url[1]) . 'ApiController';
     if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
         require_once 'app/controllers/' . $apiControllerName . '.php';
         $controller = new $apiControllerName();
-        $method = $_SERVER['REQUEST_METHOD'];
         $id = $url[2] ?? null;
+
         switch ($method) {
-            case 'GET':
-                if ($id) {
-                    $action = 'show';
-                } else {
-                    $action = 'index';
-                }
+            case 'GET': 
+                $action = $id ? 'show' : 'index';
                 break;
-            case 'POST':
+            case 'POST': 
                 $action = 'store';
                 break;
-            case 'PUT':
-                if ($id) {
-                    $action = 'update';
-                }
+            case 'PUT': 
+                $action = $id ? 'update' : null;
                 break;
-            case 'DELETE':
-                if ($id) {
-                    $action = 'destroy';
-                }
+            case 'DELETE': 
+                $action = $id ? 'destroy' : null;
                 break;
             default:
                 http_response_code(405);
-
                 echo json_encode(['message' => 'Method Not Allowed']);
-
                 exit;
         }
-        if (method_exists($controller, $action)) {
-            if ($id) {
-                call_user_func_array([$controller, $action], [$id]);
-            } else {
-                call_user_func_array([$controller, $action], []);
-            }
+
+        if ($action && method_exists($controller, $action)) {
+            call_user_func_array([$controller, $action], $id ? [$id] : []);
         } else {
             http_response_code(404);
-
             echo json_encode(['message' => 'Action not found']);
         }
         exit;
@@ -98,17 +70,4 @@ if ($controllerName === 'ApiController' && isset($url[1])) {
         echo json_encode(['message' => 'Controller not found']);
         exit;
     }
-}
-// Tạo đối tượng controller tương ứng cho các yêu cầu không phải API
-if (file_exists('app/controllers/' . $controllerName . '.php')) {
-    require_once 'app/controllers/' . $controllerName . '.php';
-    $controller = new $controllerName();
-} else {
-    die('Controller not found');
-}
-// Kiểm tra và gọi action
-if (method_exists($controller, $action)) {
-    call_user_func_array([$controller, $action], array_slice($url, 2));
-} else {
-    die('Action not found');
 }

@@ -1,6 +1,10 @@
 <?php
 require_once 'app/config/database.php';
 require_once 'app/models/ShoesModel.php';
+require_once 'app/models/BrandsModel.php';
+require_once 'app/models/ManufacturersModel.php';
+require_once 'app/models/MaterialsModel.php';
+require_once 'app/models/TypesModel.php';
 
 class ShoeApiController
 {
@@ -50,13 +54,13 @@ class ShoeApiController
         $path_image = $data['path_image'] ?? '';
         $title = $data['title'] ?? '';
         $price = $data['price'] ?? '';
-        $type = $data['type'] ?? '';
-        $brain = $data['brain'] ?? '';
-        $manufacture = $data['manufacture'] ?? '';
-        $material = $data['material'] ?? '';
+        $type_id = $data['type_id'] ?? '';
+        $brand_id = $data['brand_id'] ?? '';
+        $manufacturer_id = $data['manufacturer_id'] ?? '';
+        $material_id = $data['material_id'] ?? '';
         $description = $data['description'] ?? '';
         
-        $result = $this->shoeModel->addShoe($id, $path_image, $title, $price, $type, $brain, $manufacture, $material, $description);
+        $result = $this->shoeModel->addShoe($id, $path_image, $title, $price, $type_id, $brand_id, $manufacturer_id, $material_id, $description);
         
         if (is_array($result)) {
             http_response_code(400);
@@ -76,13 +80,13 @@ class ShoeApiController
         $path_image = $data['path_image'] ?? '';
         $title = $data['title'] ?? '';
         $price = $data['price'] ?? '';
-        $type = $data['type'] ?? '';
-        $brain = $data['brain'] ?? '';
-        $manufacture = $data['manufacture'] ?? '';
-        $material = $data['material'] ?? '';
+        $type_id = $data['type_id'] ?? '';
+        $brand_id = $data['brand_id'] ?? '';
+        $manufacturer_id = $data['manufacturer_id'] ?? '';
+        $material_id = $data['material_id'] ?? '';
         $description = $data['description'] ?? '';
         
-        $result = $this->shoeModel->updateShoe($id, $path_image, $title, $price, $type, $brain, $manufacture, $material, $description);
+        $result = $this->shoeModel->updateShoe($id, $path_image, $title, $price, $type_id, $brand_id, $manufacturer_id, $material_id, $description);
         
         if ($result) {
             echo json_encode(['message' => 'Shoe updated successfully']);
