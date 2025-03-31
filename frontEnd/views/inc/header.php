@@ -55,9 +55,7 @@
                   <label>Password</label>
                   <input type="password" id="password" required>
                 </div>
-                <div class="forgot-pass">
-                  <a href="#">Forgot Password?</a>
-                </div>
+                
                 <div class="btn">
                   <button type="submit">Login</button>
                 </div>
