@@ -95,7 +95,10 @@
                         }).format(shoe.price);
                         document.getElementById("shoe-description").textContent = shoe.description;
 
-                        document.getElementById("order-button").setAttribute("onclick", `add_shop_card(true, '${shoe.id}')`);
+                        document.getElementById("order-button").setAttribute("onclick",
+                            `add_shop_card('${shoe.id}', '${shoe.price}', document.getElementById('quantity-product').value)`
+                        );
+
                     })
                     .catch(error => console.error("Lỗi khi lấy dữ liệu sản phẩm:", error));
             }
@@ -115,46 +118,49 @@
             //console.log("up_down_quantity:", currentValue);
         };
 
-        function add_shop_card(productId, quantity) {
-            console.log("Thêm sản phẩm vào giỏ: " + productId + ", Số lượng: " + quantity);
-            // Thêm code xử lý API ở đây
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     document.getElementById("order-button").addEventListener("click", function() {
+        //         add_shop_card();
+        //     });
+        // });
+
+        function add_shop_card(productId, price, quantity) {
+            console.log("Thêm sản phẩm vào giỏ: " + productId + ", giá: " + price + ", Số lượng: " + quantity);
+
+            // Dữ liệu sản phẩm cần thêm vào giỏ hàng
+            let productData = {
+                product_id: productId,
+                quantity: quantity,
+                price: price
+            };
+            console.log("productData:", productData);
+            // Gửi dữ liệu đến API bằng Fetch API
+            fetch('http://localhost/webbangiay/api/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(productData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        alert("Sản phẩm đã được thêm vào giỏ hàng!");
+                        updateCartUI(data.cart); // Gọi lại hàm cập nhật giao diện giỏ hàng
+                    } else {
+                        alert("Lỗi khi thêm sản phẩm vào giỏ hàng.");
+                    }
+                })
+                .catch(error => console.error("Lỗi:", error));
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("order-button").addEventListener("click", function() {
-                // Thông tin sản phẩm cần thêm vào giỏ hàng
-                let productData = {
-                    product_id: 1, // Thay bằng ID sản phẩm thực tế
-                    quantity: 1, // Số lượng sản phẩm đặt hàng
-                    price: 120.00 // Giá sản phẩm
-                };
-
-                // Gửi dữ liệu đến API bằng Fetch API
-                fetch('http://localhost/webbangiay/api/cart', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(productData)
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === "success") {
-                            alert("Sản phẩm đã được thêm vào giỏ hàng!");
-                            updateCartUI(data.cart); // Gọi lại hàm cập nhật giao diện giỏ hàng
-                        } else {
-                            alert("Lỗi khi thêm sản phẩm vào giỏ hàng.");
-                        }
-                    })
-                    .catch(error => console.error("Lỗi:", error));
-            });
-
-            // Hàm cập nhật giao diện giỏ hàng
-            function updateCartUI(cart) {
-                const cartCount = document.querySelector('.badge.bg-primary');
+        // Hàm cập nhật giao diện giỏ hàng
+        function updateCartUI(cart) {
+            const cartCount = document.querySelector('.badge.bg-primary');
+            if (cartCount) {
                 cartCount.textContent = Object.keys(cart).length; // Cập nhật số lượng giỏ hàng
             }
-        });
+        }
     </script>
 
 

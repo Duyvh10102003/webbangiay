@@ -144,21 +144,21 @@
   </div>
   <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart">
     <div class="offcanvas-header justify-content-center">
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <div class="order-md-last">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-primary">Your cart</span>
-                <span class="badge bg-primary rounded-pill">0</span>
-            </h4>
-            <ul class="list-group mb-3">
-                <!-- Các sản phẩm sẽ được thêm vào đây bằng JavaScript -->
-            </ul>
-            <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
-        </div>
+      <div class="order-md-last">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-primary">Your cart</span>
+          <span class="badge bg-primary rounded-pill">0</span>
+        </h4>
+        <ul class="list-group mb-3">
+          <!-- Các sản phẩm sẽ được thêm vào đây bằng JavaScript -->
+        </ul>
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+      </div>
     </div>
-</div>
+  </div>
 
 
   <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasSearch">
@@ -320,34 +320,34 @@
   document.addEventListener("DOMContentLoaded", function() {
     // Lấy giỏ hàng từ API khi trang tải xong
     fetch('http://localhost/webbangiay/api/cart')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                updateCartUI(data.cart);
-            } else {
-                console.error('Error fetching cart data');
-            }
-        })
-        .catch(error => console.error('Error:', error));
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          updateCartUI(data.cart);
+        } else {
+          console.error('Error fetching cart data');
+        }
+      })
+      .catch(error => console.error('Error:', error));
 
     // Cập nhật giỏ hàng trên giao diện người dùng
     function updateCartUI(cart) {
-        const cartList = document.querySelector('.offcanvas-body .list-group');
-        const cartCount = document.querySelector('.badge.bg-primary');
-        let total = 0;
-        cartList.innerHTML = ''; // Xóa danh sách hiện tại
+      const cartList = document.querySelector('.offcanvas-body .list-group');
+      const cartCount = document.querySelector('.badge.bg-primary');
+      let total = 0;
+      cartList.innerHTML = ''; // Xóa danh sách hiện tại
 
-        // Duyệt qua các sản phẩm trong giỏ hàng và thêm vào danh sách
-        Object.keys(cart).forEach(product_id => {
-            const product = cart[product_id];
-            const listItem = document.createElement('li');
-            listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-sm');
-            
-            const productName = `Product ${product_id}`; // Có thể thay bằng tên sản phẩm thật
-            const productDescription = 'Brief description'; // Thêm mô tả sản phẩm
-            const productPrice = `$${(product.quantity * product.price).toFixed(2)}`; // Tính tổng tiền sản phẩm
+      // Duyệt qua các sản phẩm trong giỏ hàng và thêm vào danh sách
+      Object.keys(cart).forEach(product_id => {
+        const product = cart[product_id];
+        const listItem = document.createElement('li');
+        listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-sm');
 
-            listItem.innerHTML = `
+        const productName = `${product_id}`; // Có thể thay bằng tên sản phẩm thật
+        const productDescription = 'Brief description'; // Thêm mô tả sản phẩm
+        const productPrice = `${(product.quantity * product.price).toLocaleString('vi-VN')} VND`;
+
+        listItem.innerHTML = `
                 <div>
                     <h6 class="my-0">${productName}</h6>
                     <small class="text-body-secondary">${productDescription}</small>
@@ -355,27 +355,26 @@
                 <span class="text-body-secondary">${productPrice}</span>
             `;
 
-            // Thêm sản phẩm vào danh sách giỏ hàng
-            cartList.appendChild(listItem);
+        // Thêm sản phẩm vào danh sách giỏ hàng
+        cartList.appendChild(listItem);
 
-            // Cập nhật tổng tiền
-            total += product.quantity * product.price;
-        });
+        // Cập nhật tổng tiền
+        total += product.quantity * product.price;
+      });
 
-        // Cập nhật số lượng giỏ hàng
-        cartCount.textContent = Object.keys(cart).length;
-        
-        // Cập nhật tổng giá giỏ hàng
-        const totalItem = document.createElement('li');
-        totalItem.classList.add('list-group-item', 'd-flex', 'justify-content-between');
-        totalItem.innerHTML = `
-            <span>Total (VND)</span>
-            <strong>$${total.toFixed(2)}</strong>
-        `;
-        cartList.appendChild(totalItem);
+      // Cập nhật số lượng giỏ hàng
+      cartCount.textContent = Object.keys(cart).length;
+
+      // Cập nhật tổng giá giỏ hàng
+      const totalItem = document.createElement('li');
+      totalItem.classList.add('list-group-item', 'd-flex', 'justify-content-between');
+      totalItem.innerHTML = `
+    <span>Total (VND)</span>
+    <strong>${total.toLocaleString('vi-VN')} đ</strong>
+`;
+      cartList.appendChild(totalItem);
     }
-});
-
+  });
 </script>
 
 
