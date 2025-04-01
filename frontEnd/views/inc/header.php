@@ -155,7 +155,8 @@
         <ul class="list-group mb-3">
           <!-- Các sản phẩm sẽ được thêm vào đây bằng JavaScript -->
         </ul>
-        <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+        <button class="w-100 btn btn-primary btn-lg" onclick="redirectToOrder()">Continue to checkout</button>
+
       </div>
     </div>
   </div>
@@ -375,6 +376,21 @@
       cartList.appendChild(totalItem);
     }
   });
+  function redirectToOrder() {
+    // Lấy giỏ hàng từ API
+    fetch('http://localhost/webbangiay/api/cart')
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Chuyển hướng qua trang order.php và truyền dữ liệu giỏ hàng
+            localStorage.setItem("cart", JSON.stringify(data.cart));
+            window.location.href = "order.php";
+        } else {
+            alert("Giỏ hàng của bạn đang trống!");
+        }
+    })
+    .catch(error => console.error('Lỗi lấy giỏ hàng:', error));
+}
 </script>
 
 
