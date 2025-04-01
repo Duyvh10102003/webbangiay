@@ -33,7 +33,7 @@
         class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
         <ul class="d-flex justify-content-end list-unstyled m-0">
 
-          <li id="user-menu" >
+          <li id="user-menu">
             <a href="#" class="rounded-circle bg-light p-2 mx-1" onclick="toggleLoginForm()">
               <svg width="24" height="24" viewBox="0 0 24 24">
                 <use xlink:href="#user"></use>
@@ -55,7 +55,7 @@
                   <label>Password</label>
                   <input type="password" id="password" required>
                 </div>
-                
+
                 <div class="btn">
                   <button type="submit">Login</button>
                 </div>
@@ -67,32 +67,39 @@
           </div>
 
           <div id="signupForm" class="login-container">
-  <div class="login-box">
-    <span class="close-btn" onclick="toggleSignupForm()">&times;</span>
-    <div class="text">Signup Form</div>
-    <form onsubmit="signupUser(event)">
-      <div class="data">
-        <label>Username</label>
-        <input type="text" id="signup-username" required>
-      </div>
-      <div class="data">
-        <label>Email</label>
-        <input type="email" id="signup-email" required>
-      </div>
-      <div class="data">
-        <label>Password</label>
-        <input type="password" id="signup-password" required>
-      </div>
-      <div class="btn">
-        <button type="submit">Signup</button>
-      </div>
-      <div class="signup-link">
-        Already have an account? <a href="#" onclick="toggleForms()">Login now</a>
-      </div>
-    </form>
-  </div>
-</div>
-
+            <div class="login-box">
+              <span class="close-btn" onclick="toggleSignupForm()">&times;</span>
+              <div class="text">Signup Form</div>
+              <form onsubmit="signupUser(event)">
+                <div class="data">
+                  <label>Username</label>
+                  <input type="text" id="signup-username" required>
+                </div>
+                <div class="data">
+                  <label>Email</label>
+                  <input type="email" id="signup-email" required>
+                </div>
+                <div class="data">
+                  <label>Password</label>
+                  <input type="password" id="signup-password" required>
+                </div>
+                <div class="btn">
+                  <button type="submit">Signup</button>
+                </div>
+                <div class="signup-link">
+                  Already have an account? <a href="#" onclick="toggleForms()">Login now</a>
+                </div>
+              </form>
+            </div>
+          </div>
+          <li class="d-lg-none">
+            <a href="#" class="rounded-circle bg-light p-2 mx-1" data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <use xlink:href="#search"></use>
+              </svg>
+            </a>
+          </li>
 
           <li>
             <a href="#" class="rounded-circle bg-light p-2 mx-1" data-bs-toggle="offcanvas"
@@ -102,14 +109,7 @@
               </svg>
             </a>
           </li>
-          <li class="d-lg-none">
-            <a href="#" class="rounded-circle bg-light p-2 mx-1" data-bs-toggle="offcanvas"
-              data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
-              <svg width="24" height="24" viewBox="0 0 24 24">
-                <use xlink:href="#search"></use>
-              </svg>
-            </a>
-          </li>
+
         </ul>
 
       </div>
@@ -144,46 +144,22 @@
   </div>
   <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart">
     <div class="offcanvas-header justify-content-center">
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      <div class="order-md-last">
-        <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-primary">Your cart</span>
-          <span class="badge bg-primary rounded-pill">3</span>
-        </h4>
-        <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Product One</h6>
-              <small class="text-body-secondary">Brief description</small>
-            </div>
-            <span class="text-body-secondary">$120</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Product Two</h6>
-              <small class="text-body-secondary">Brief description</small>
-            </div>
-            <span class="text-body-secondary">$80</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Product Three</h6>
-              <small class="text-body-secondary">Brief description</small>
-            </div>
-            <span class="text-body-secondary">$50</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Total (USD)</span>
-            <strong>$300</strong>
-          </li>
-        </ul>
-
-        <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
-      </div>
+        <div class="order-md-last">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-primary">Your cart</span>
+                <span class="badge bg-primary rounded-pill">0</span>
+            </h4>
+            <ul class="list-group mb-3">
+                <!-- Các sản phẩm sẽ được thêm vào đây bằng JavaScript -->
+            </ul>
+            <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+        </div>
     </div>
-  </div>
+</div>
+
 
   <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasSearch">
     <div class="offcanvas-header justify-content-center">
@@ -205,71 +181,71 @@
 </header>
 <script>
   function toggleForms() {
-  var loginForm = document.getElementById("loginForm");
-  var signupForm = document.getElementById("signupForm");
+    var loginForm = document.getElementById("loginForm");
+    var signupForm = document.getElementById("signupForm");
 
-  if (loginForm.classList.contains("show")) {
-    loginForm.classList.remove("show");
-    signupForm.classList.add("show");
-  } else {
-    signupForm.classList.remove("show");
-    loginForm.classList.add("show");
-  }
-}
-
-function toggleLoginForm() {
-  var form = document.getElementById("loginForm");
-  form.classList.toggle("show");
-}
-
-function toggleSignupForm() {
-  var form = document.getElementById("signupForm");
-  form.classList.toggle("show");
-}
-
-async function signupUser(event) {
-  event.preventDefault();
-
-  const username = document.getElementById("signup-username").value;
-  const email = document.getElementById("signup-email").value;
-  const password = document.getElementById("signup-password").value;
-
-  if (!username || !email || !password) {
-    alert("Vui lòng nhập đầy đủ thông tin!");
-    return;
-  }
-
-  const signupData = {
-    username: username,
-    email: email,
-    password: password
-  };
-
-  try {
-    const response = await fetch("http://localhost/webbangiay/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(signupData)
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      alert(data.error); // Hiển thị lỗi từ API
+    if (loginForm.classList.contains("show")) {
+      loginForm.classList.remove("show");
+      signupForm.classList.add("show");
     } else {
-      alert("Đăng ký thành công! Vui lòng đăng nhập.");
-
-      // Ẩn form đăng ký, hiển thị form đăng nhập
-      document.getElementById("signupForm").classList.remove("show");
-      document.getElementById("loginForm").classList.add("show");
+      signupForm.classList.remove("show");
+      loginForm.classList.add("show");
     }
-  } catch (error) {
-    console.error("Lỗi kết nối API:", error);
-    alert("Lỗi kết nối API, vui lòng thử lại!");
   }
-}
+
+  function toggleLoginForm() {
+    var form = document.getElementById("loginForm");
+    form.classList.toggle("show");
+  }
+
+  function toggleSignupForm() {
+    var form = document.getElementById("signupForm");
+    form.classList.toggle("show");
+  }
+
+  async function signupUser(event) {
+    event.preventDefault();
+
+    const username = document.getElementById("signup-username").value;
+    const email = document.getElementById("signup-email").value;
+    const password = document.getElementById("signup-password").value;
+
+    if (!username || !email || !password) {
+      alert("Vui lòng nhập đầy đủ thông tin!");
+      return;
+    }
+
+    const signupData = {
+      username: username,
+      email: email,
+      password: password
+    };
+
+    try {
+      const response = await fetch("http://localhost/webbangiay/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(signupData)
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        alert(data.error); // Hiển thị lỗi từ API
+      } else {
+        alert("Đăng ký thành công! Vui lòng đăng nhập.");
+
+        // Ẩn form đăng ký, hiển thị form đăng nhập
+        document.getElementById("signupForm").classList.remove("show");
+        document.getElementById("loginForm").classList.add("show");
+      }
+    } catch (error) {
+      console.error("Lỗi kết nối API:", error);
+      alert("Lỗi kết nối API, vui lòng thử lại!");
+    }
+  }
 
   async function loginUser(event) {
     event.preventDefault(); // Ngăn chặn reload trang
@@ -333,11 +309,73 @@ async function signupUser(event) {
 
   // Gọi hàm này khi trang load để kiểm tra xem user đã đăng nhập chưa
   document.addEventListener("DOMContentLoaded", updateUserUI);
+
   function logoutUser() {
-  localStorage.removeItem("userToken");
-  localStorage.removeItem("userInfo");
-  window.location.reload(); // Refresh lại trang để cập nhật giao diện
-}
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userInfo");
+    window.location.reload(); // Refresh lại trang để cập nhật giao diện
+  }
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    // Lấy giỏ hàng từ API khi trang tải xong
+    fetch('/api/cart')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                updateCartUI(data.cart);
+            } else {
+                console.error('Error fetching cart data');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+
+    // Cập nhật giỏ hàng trên giao diện người dùng
+    function updateCartUI(cart) {
+        const cartList = document.querySelector('.offcanvas-body .list-group');
+        const cartCount = document.querySelector('.badge.bg-primary');
+        let total = 0;
+        cartList.innerHTML = ''; // Xóa danh sách hiện tại
+
+        // Duyệt qua các sản phẩm trong giỏ hàng và thêm vào danh sách
+        Object.keys(cart).forEach(product_id => {
+            const product = cart[product_id];
+            const listItem = document.createElement('li');
+            listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-sm');
+            
+            const productName = `Product ${product_id}`; // Có thể thay bằng tên sản phẩm thật
+            const productDescription = 'Brief description'; // Thêm mô tả sản phẩm
+            const productPrice = `$${(product.quantity * product.price).toFixed(2)}`; // Tính tổng tiền sản phẩm
+
+            listItem.innerHTML = `
+                <div>
+                    <h6 class="my-0">${productName}</h6>
+                    <small class="text-body-secondary">${productDescription}</small>
+                </div>
+                <span class="text-body-secondary">${productPrice}</span>
+            `;
+
+            // Thêm sản phẩm vào danh sách giỏ hàng
+            cartList.appendChild(listItem);
+
+            // Cập nhật tổng tiền
+            total += product.quantity * product.price;
+        });
+
+        // Cập nhật số lượng giỏ hàng
+        cartCount.textContent = Object.keys(cart).length;
+        
+        // Cập nhật tổng giá giỏ hàng
+        const totalItem = document.createElement('li');
+        totalItem.classList.add('list-group-item', 'd-flex', 'justify-content-between');
+        totalItem.innerHTML = `
+            <span>Total (USD)</span>
+            <strong>$${total.toFixed(2)}</strong>
+        `;
+        cartList.appendChild(totalItem);
+    }
+});
+
 </script>
 
 

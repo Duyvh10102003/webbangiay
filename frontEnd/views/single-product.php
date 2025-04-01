@@ -28,28 +28,28 @@
                     <div class="title-id" id="shoe-id"></div>
                 </div>
                 <div class="desc-product">
-                    <div class="col-sm-4-detail">
-                        <div class="id-product">
-                            <span id="shoe-id-text"></span>
-                        </div>
-                        <div class="metarial-product">
-                            <span id="shoe-material"></span>
-                        </div>
-                        <div class="brain-product">
-                            <span id="shoe-brand"></span>
-                        </div>
-                        <div class="manufacture-product">
-                            <span id="shoe-manufacture"></span>
-                        </div>
-                    </div>
-                    <div class="col-sm-8-detail">
-                        <span class="price">
-                            <span class="title-price">Giá: </span>
-                            <span class="price-real" id="shoe-price"></span>
-                        </span>
-                        <span class="notify">MIỄN PHÍ VẬN CHUYỂN TOÀN QUỐC KHI ĐẶT HÀNG ONLINE</span>
-                    </div>
-                </div>
+    <div class="col-sm-4-detail">
+        <div class="id-product">
+            <span id="shoe-id-text"></span>
+        </div>
+        <div class="metarial-product">
+            <span id="shoe-material"></span>
+        </div>
+        <div class="brain-product">
+            <span id="shoe-brand"></span>
+        </div>
+        <div class="manufacture-product">
+            <span id="shoe-manufacture"></span>
+        </div>
+    </div>
+    <div class="col-sm-8-detail">
+        <span class="price">
+            <span class="title-price">Giá: </span>
+            <span class="price-real" id="shoe-price"></span>
+        </span>
+        <span class="notify">MIỄN PHÍ VẬN CHUYỂN TOÀN QUỐC KHI ĐẶT HÀNG ONLINE</span>
+    </div>
+</div>
                 <div class="desc-content-product" id="shoe-description"></div>
                 <div class="box-option">
                     <div class="quantity-box">
@@ -70,29 +70,54 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const shoeId = urlParams.get("id");
-        
-        if (shoeId) {
-            fetch(`http://localhost/webbangiay/api/shoe/${shoeId}`)
-                .then(response => response.json())
-                .then(shoe => {
-                    document.getElementById("shoe-image").src = shoe.path_image;
-                    document.getElementById("shoe-title").textContent = shoe.title;
-                    document.getElementById("shoe-id").textContent = " - " + shoe.id;
-                    document.getElementById("shoe-id-text").textContent = "ID: " + shoe.id;
-                    document.getElementById("shoe-material").textContent = "Chất liệu: " + shoe.material;
-                    document.getElementById("shoe-brand").textContent = "Thương hiệu: " + shoe.brand;
-                    document.getElementById("shoe-manufacture").textContent = "Sản xuất: " + shoe.manufacture;
-                    document.getElementById("shoe-price").textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(shoe.price);
-                    document.getElementById("shoe-description").textContent = shoe.description;
-                    
-                    document.getElementById("order-button").setAttribute("onclick", `add_shop_card(true, '${shoe.id}')`);
-                })
-                .catch(error => console.error("Lỗi khi lấy dữ liệu sản phẩm:", error));
+   document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shoeId = urlParams.get("id");
+    
+    if (shoeId) {
+        fetch(`http://localhost/webbangiay/api/shoe/${shoeId}`)
+            .then(response => response.json())
+            .then(shoe => {
+                // Cập nhật các trường dữ liệu
+                document.getElementById("shoe-image").src = shoe.path_image;  // Hình ảnh
+                document.getElementById("shoe-title").textContent = shoe.title;  // Tên sản phẩm
+                document.getElementById("shoe-id").textContent = " - " + shoe.id;  // ID sản phẩm
+                document.getElementById("shoe-id-text").textContent = "ID: " + shoe.id;  // ID sản phẩm
+                document.getElementById("shoe-material").textContent = "Chất liệu: " + shoe.material_id;  // Chất liệu
+                document.getElementById("shoe-brand").textContent = "Thương hiệu: " + shoe.brand_id;  // Thương hiệu
+                document.getElementById("shoe-manufacture").textContent = "Sản xuất: " + shoe.manufacturer_id;  // Sản xuất
+                document.getElementById("shoe-price").textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(shoe.price);  // Giá
+                document.getElementById("shoe-description").textContent = shoe.description;  // Mô tả
+                
+                // Cập nhật sự kiện cho nút Đặt Hàng
+                document.getElementById("order-button").setAttribute("onclick", `add_shop_card(true, '${shoe.id}')`);
+            })
+            .catch(error => console.error("Lỗi khi lấy dữ liệu sản phẩm:", error));
+    }
+});
+const change_input_quantity = (event) => {
+        if (event.data < '0' || event.data > '9') {
+            event.target.value = event.target.value.replace(/\D/, '')
         }
-    });
+    }
+
+    const blur_input = (event) => {
+        if (event.target.value === '') {
+            // event.target.value = '1'
+        } else {
+            event.target.value = parseInt(event.target.value).toString()
+        }
+    }
+
+    const up_down_quantity = (operator) => {
+        input_quantity = document.querySelector('#quantity-product')
+        if (operator === '-') {
+            input_quantity.value = (input_quantity.value <= 0 ? input_quantity.value : parseInt(input_quantity.value) - 1).toString()
+        } else if (operator === '+') {
+            ++input_quantity.value
+        }
+    }
+
 </script>
 
     <?php
