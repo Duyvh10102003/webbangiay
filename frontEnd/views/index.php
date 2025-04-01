@@ -3,6 +3,10 @@
 
 <head>
   <?php include 'inc/head.php'; ?>
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
 </head>
 
 <body>
@@ -11,70 +15,7 @@
   include 'inc/icon.php';
   ?>
 
-  <div class="preloader-wrapper">
-    <div class="preloader">
-    </div>
-  </div>
-  <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart">
-    <div class="offcanvas-header justify-content-center">
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <div class="order-md-last">
-        <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-primary">Your cart</span>
-          <span class="badge bg-primary rounded-pill">3</span>
-        </h4>
-        <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Product One</h6>
-              <small class="text-body-secondary">Brief description</small>
-            </div>
-            <span class="text-body-secondary">$120</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Product Two</h6>
-              <small class="text-body-secondary">Brief description</small>
-            </div>
-            <span class="text-body-secondary">$80</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Product Three</h6>
-              <small class="text-body-secondary">Brief description</small>
-            </div>
-            <span class="text-body-secondary">$50</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Total (USD)</span>
-            <strong>$300</strong>
-          </li>
-        </ul>
-
-        <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasSearch">
-    <div class="offcanvas-header justify-content-center">
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <div class="order-md-last">
-        <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-primary">Search</span>
-        </h4>
-        <form role="search" action="index.php" method="get" class="d-flex mt-3 gap-0">
-          <input class="form-control rounded-start rounded-0 bg-light" type="email"
-            placeholder="What are you looking for?" aria-label="What are you looking for?">
-          <button class="btn btn-dark rounded-end rounded-0" type="submit">Search</button>
-        </form>
-      </div>
-    </div>
-  </div>
+ 
   <section>
     <div>
       <div
@@ -181,40 +122,7 @@
     </div>
   </section>
 
-  <section class="py-4">
-    <div class="container-fluid">
-      <div class="row">
-
-        <div class="col-md-6">
-          <div class="banner-ad bg-secondary-subtle mb-3"
-            style="background: url('../images/ad-image-1.png');background-repeat: no-repeat;background-position: right bottom;">
-            <div class="banner-content p-5">
-
-              <div class="fs-6 pt-5">Upto 25% Off</div>
-              <h3 class="banner-title">Sports Shoes</h3>
-              <a href="#" class="btn btn-dark text-uppercase">Show Now</a>
-
-            </div>
-
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="banner-ad bg-secondary-subtle"
-            style="background: url('../images/ad-image-2.png');background-repeat: no-repeat;background-position: right bottom;">
-            <div class="banner-content p-5">
-
-              <div class="fs-6 pt-5">Upto 25% Off</div>
-              <h3 class="banner-title">Kids Collection</h3>
-              <a href="#" class="btn btn-dark text-uppercase">Show Now</a>
-
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
+  
 
   <section class="py-5">
     <div class="container-fluid">
@@ -369,5 +277,6 @@
     crossorigin="anonymous"></script>
   <script src="../js/plugins.js"></script>
   <script src="../js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
