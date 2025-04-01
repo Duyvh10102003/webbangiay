@@ -45,7 +45,7 @@
           <div id="loginForm" class="login-container">
             <div class="login-box">
               <span class="close-btn" onclick="toggleLoginForm()">&times;</span>
-              <div class="text">Login Form</div>
+              <div class="text">Login</div>
               <form onsubmit="loginUser(event)">
                 <div class="data">
                   <label>Email</label>
@@ -69,7 +69,7 @@
           <div id="signupForm" class="login-container">
             <div class="login-box">
               <span class="close-btn" onclick="toggleSignupForm()">&times;</span>
-              <div class="text">Signup Form</div>
+              <div class="text">Signup</div>
               <form onsubmit="signupUser(event)">
                 <div class="data">
                   <label>Username</label>
@@ -319,7 +319,7 @@
 
   document.addEventListener("DOMContentLoaded", function() {
     // Lấy giỏ hàng từ API khi trang tải xong
-    fetch('/api/cart')
+    fetch('http://localhost/webbangiay/api/cart')
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
@@ -369,7 +369,7 @@
         const totalItem = document.createElement('li');
         totalItem.classList.add('list-group-item', 'd-flex', 'justify-content-between');
         totalItem.innerHTML = `
-            <span>Total (USD)</span>
+            <span>Total (VND)</span>
             <strong>$${total.toFixed(2)}</strong>
         `;
         cartList.appendChild(totalItem);

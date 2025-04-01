@@ -192,45 +192,46 @@
     position: relative;
     display: inline-block;
     border-collapse: separate;
-  }
-  
-  .quantity-box > label {
+}
+
+.quantity-box > label {
     display: inline-block;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 20px;
     font-weight: 700;
     color: #000000;
-  }
-  
-  .quantity-box > .quantity-content {
+}
+
+.quantity-box > .quantity-content {
     margin-left: 20px;
     vertical-align: middle;
     border: 1px solid #f0f0f0;
     position: relative;
-    width: 104px;
+    width: 120px;  /* Tăng width để đảm bảo đủ không gian */
     height: 32px;
     border-radius: 0px;
     display: inline-block;
-  }
-  
-  .quantity-box > .quantity-content > .form-control {
-    width: 40px;
+}
+
+.quantity-box > .quantity-content > .form-control {
+    width: 100%;  /* Đảm bảo chiếm toàn bộ không gian */
     background: #fff;
-    padding: 0 32px;
+    padding: 0 12px;  /* Giảm padding cho phù hợp */
     height: 32px;
     line-height: 30px;
     text-align: center;
     color: #323232;
     font-size: 14px;
     border: none;
-  }
-  
-  .quantity-box > .quantity-content > .form-control:focus {
+    box-sizing: border-box;  /* Đảm bảo padding không gây tràn */
+}
+
+.quantity-box > .quantity-content > .form-control:focus {
     outline: none;
-  }
-  
-  .quantity-box > .quantity-content > .input-group-addon {
+}
+
+.quantity-box > .quantity-content > .input-group-addon {
     background: #fff;
     border: 0;
     padding: 0;
@@ -245,15 +246,16 @@
     font-size: 25px;
     top: 0;
     user-select: none;
-  }
-  
-  .quantity-box > .quantity-content > .product_quantity_down {
+}
+
+.quantity-box > .quantity-content > .product_quantity_down {
     left: 0;
-  }
-  
-  .quantity-box > .quantity-content > .product_quantity_up {
+}
+
+.quantity-box > .quantity-content > .product_quantity_up {
     right: 0;
-  }
+}
+
   
   
   .button-card, .button-admin {
@@ -273,6 +275,7 @@
     transition: ease all 0.4s;
     border: 0;
   }
+
   
   
  
