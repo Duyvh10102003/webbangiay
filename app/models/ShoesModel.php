@@ -112,7 +112,7 @@ class ShoesModel
 
     public function updateShoe($id, $path_image, $title, $price, $type_id, $brand_id, $manufacturer_id, $material_id, $description)
     {
-        $query = "UPDATE {$this->table_name} 
+        $query = "UPDATE " .$this->table_name ." 
                   SET path_image = :path_image, title = :title, price = :price, type_id = :type_id,  brand_id = :brand_id, manufacturer_id = :manufacturer_id, material_id = :material_id,  description = :description
                   WHERE id = :id";
 
@@ -124,7 +124,7 @@ class ShoesModel
         $clean_price = htmlspecialchars(strip_tags($price));
         $clean_description = htmlspecialchars(strip_tags($description));
 
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_STR);
         $stmt->bindParam(':path_image', $clean_path_image);
         $stmt->bindParam(':title', $clean_title);
         $stmt->bindParam(':price', $clean_price);
@@ -139,11 +139,14 @@ class ShoesModel
 
     public function deleteShoe($id)
     {
-        $query = "DELETE FROM {$this->table_name} WHERE id = :id";
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id);
 
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
     }
 }
