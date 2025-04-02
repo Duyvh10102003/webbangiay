@@ -12,7 +12,7 @@ class UserModel
     }
 
     // 🟢 Đăng ký User + Gán Role
-    public function register($username, $email, $password, $role = "User")
+    public function register($username, $email, $password, $role)
     {
         // Kiểm tra dữ liệu đầu vào
         if (empty($username) || empty($email) || empty($password)) {

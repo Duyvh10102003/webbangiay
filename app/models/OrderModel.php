@@ -40,6 +40,9 @@ class OrderModel
             // Xác nhận transaction
             $this->conn->commit();
 
+            // Xóa session giỏ hàng sau khi đặt hàng thành công
+            unset($_SESSION['cart']);
+
             return ["status" => "success", "message" => "Order created", "order_id" => $order_id];
         } catch (Exception $e) {
             // Nếu có lỗi, rollback để hủy thay đổi
