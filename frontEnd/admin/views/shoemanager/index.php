@@ -67,7 +67,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="addForm" method="post" asp-action="AddQuantity">
+            <form id="addForm" method="post" asp-action="AddQuantity" enctype="multipart/form-data">
                 <div class="modal-body">
                     <input type="hidden" name="BookId" id="addBookId" />
                     <div class="form-group">
@@ -89,7 +89,7 @@
 
                
     <script>
-  const API_URL = "http://localhost/webbangiay/api/shoe";
+  const API_URL = "http://localhost:8080/webbangiay/api/shoe";
 
 // Load danh sách sản phẩm
 function loadProducts() {
@@ -107,8 +107,7 @@ function loadProducts() {
             <td class="text-left">${product.title}</td>
             <td>${parseFloat(product.price).toLocaleString()} VND</td>
             <td>
-              <button class="btn btn-warning btn-sm action-btn edit-btn" data-id="${product.id}" data-title="${product.title}" data-description="${product.description}" data-price="${product.price}" data-type="${product.type}" data-brain="${product.brain}" data-manufacture="${product.manufacture}" data-material="${product.material}" data-path_image="${product.path_image}">Chỉnh Sửa</button>
-              <button class="btn btn-info btn-sm action-btn details-btn" data-id="${product.id}">Chi Tiết</button>
+              <button class="btn btn-warning btn-sm action-btn edit-btn" data-id="${product.id}">Chỉnh Sửa</button>
               <button class="btn btn-danger btn-sm action-btn delete-btn" data-id="${product.id}">Xóa</button>
             </td>
           </tr>
@@ -129,6 +128,31 @@ function loadProducts() {
 $(document).ready(function() {
   loadProducts();
 });
+//
+$(document).on("click", ".edit-btn", function() {
+    let productId = $(this).data("id");  // Lấy ID giày cần chỉnh sửa
+    window.location.href = `edit.php?id=${productId}`;  // Chuyển hướng đến trang edit.php
+});
+
+// Xóa sản phẩm
+$(document).on("click", ".delete-btn", function() {
+    let productId = $(this).data("id");
+    if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
+        $.ajax({
+            url: `${API_URL}/${productId}`, // Gửi yêu cầu DELETE đến API
+            method: "DELETE",
+            success: function(response) {
+                alert("Xóa sản phẩm thành công!");
+                loadProducts(); // Tải lại danh sách sản phẩm
+            },
+            error: function(xhr) {
+                console.error("Lỗi khi xóa sản phẩm:", xhr.responseText);
+                alert("Có lỗi xảy ra khi xóa sản phẩm!");
+            }
+        });
+    }
+});
+
 
     </script>
 
