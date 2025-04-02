@@ -1,52 +1,99 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const searchForm = document.getElementById("search-form");
-    const searchInput = document.getElementById("search-input");
+    // Xử lý search trong header
+    const headerSearchForm = document.getElementById("header-search-form");
+    const headerSearchInput = document.getElementById("header-search-input");
+    const headerSearchButton = document.getElementById("header-search-button");
 
-    // Ngăn chặn reload khi nhấn Enter
-    searchInput.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault(); // Ngăn form submit mặc định
-            searchProduct();
-        }
-    });
+    // Xử lý search trong trang search.php
+    const mainSearchForm = document.getElementById("main-search-form");
+    const mainSearchInput = document.getElementById("main-search-input");
+    const mainSearchButton = document.getElementById("main-search-button");
+    const resultsContainer = document.getElementById("search-results");
 
-    // Ngăn chặn submit form về trang chủ
-    searchForm.addEventListener("submit", function(event) {
-        event.preventDefault(); // Ngăn form reload
-        searchProduct();
-    });
+    // Xử lý sự kiện cho header search
+    if (headerSearchForm) {
+        headerSearchButton.addEventListener("click", () => handleSearch(headerSearchInput.value, false));
+        headerSearchInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearch(headerSearchInput.value, false);
+            }
+        });
+    }
 
-    function searchProduct() {
-        const searchQuery = searchInput.value.trim();
+    // Xử lý sự kiện cho main search
+    if (mainSearchForm) {
+        mainSearchButton.addEventListener("click", () => handleSearch(mainSearchInput.value, true));
+        mainSearchInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearch(mainSearchInput.value, true);
+            }
+        });
+    }
+
+    function handleSearch(query, isMainSearch) {
+        const searchQuery = query.trim();
+
         if (!searchQuery) {
             alert("Vui lòng nhập từ khóa tìm kiếm!");
             return;
         }
 
-        fetch(`http://localhost/webbangiay/api/shoe?search=${encodeURIComponent(searchQuery)}`)
-            .then(response => response.json())
-            .then(data => displayResults(data))
-            .catch(error => console.error("Lỗi khi tìm kiếm:", error));
+        if (isMainSearch) {
+            // Hiển thị loading
+            if (resultsContainer) resultsContainer.innerHTML = "<div class='loading'>Đang tìm kiếm...</div>";
+
+            // Gọi API
+            fetch(`/webbangiay/api/shoe?search=${encodeURIComponent(searchQuery)}`)
+                .then(response => {
+                    if (!response.ok) throw new Error("Lỗi kết nối");
+                    return response.json();
+                })
+                .then(data => {
+                    if (resultsContainer) {
+                        if (data.message && !Array.isArray(data)) {
+                            resultsContainer.innerHTML = `<p class="error">${data.message}</p>`;
+                        } else {
+                            displayResults(data);
+                        }
+                    }
+                    // Cập nhật URL
+                    window.location.href = `/webbangiay/frontEnd/views/search.php?search=${encodeURIComponent(searchQuery)}`;
+                })
+                .catch(error => {
+                    console.error("Lỗi:", error);
+                    if (resultsContainer) resultsContainer.innerHTML = `<p class="error">Có lỗi xảy ra</p>`;
+                });
+        } else {
+            // Chuyển hướng đến trang search với từ khóa
+            window.location.href = `/webbangiay/frontEnd/views/search.php?search=${encodeURIComponent(searchQuery)}`;
+        }
     }
 
     function displayResults(products) {
-        const resultsContainer = document.querySelector(".search-results");
-        resultsContainer.innerHTML = ""; // Xóa kết quả cũ
+        if (!resultsContainer) return;
 
         if (!products || products.length === 0) {
-            resultsContainer.innerHTML = "<p>Không tìm thấy sản phẩm nào.</p>";
+            resultsContainer.innerHTML = "<p class='no-results'>Không tìm thấy sản phẩm nào.</p>";
             return;
         }
 
+        let html = "";
         products.forEach(product => {
-            const productItem = `
-              <div class='product-item'>
-                  <img src='${product.path_image}' alt='Sản phẩm'>
-                  <h3><a href='single-product.php?id=${product.id}'>${product.title}</a></h3>
-                  <p>Giá: ${new Intl.NumberFormat("vi-VN").format(product.price)} VND</p>
-              </div>
-          `;
-            resultsContainer.innerHTML += productItem;
+            html += `
+                <div class="product-item">
+                    <img src="${product.path_image}" alt="${product.title}">
+                    <h3><a href="single-product.php?id=${product.id}">${product.title}</a></h3>
+                    <p>Giá: ${formatPrice(product.price)} VND</p>
+                </div>
+            `;
         });
+
+        resultsContainer.innerHTML = html;
+    }
+
+    function formatPrice(price) {
+        return new Intl.NumberFormat("vi-VN").format(price || 0);
     }
 });

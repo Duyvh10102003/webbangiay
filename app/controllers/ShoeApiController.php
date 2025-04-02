@@ -124,7 +124,7 @@ class ShoeApiController
         try {
             $shoes = $this->shoeModel->search($name);
     
-            if (!empty($shoes)) {
+                if (!empty($shoes)) {
                 echo json_encode($shoes);
             } else {
                 http_response_code(404);
