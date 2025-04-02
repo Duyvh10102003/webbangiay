@@ -82,26 +82,26 @@
 <script>
     $(document).ready(function() {
         // Lấy dữ liệu thể loại từ API
-        $.get('http://localhost:8080/webbangiay/api/type', function(data) {
+        $.get('http://localhost/webbangiay/api/type', function(data) {
             data.forEach(type => {
                 $('#type_id').append(`<option value="${type.id}">${type.name}</option>`);
             });
         });
 
         // Lấy dữ liệu thương hiệu từ API
-        $.get('http://localhost:8080/webbangiay/api/brand', function(data) {
+        $.get('http://localhost/webbangiay/api/brand', function(data) {
             data.forEach(brand => {
                 $('#brand_id').append(`<option value="${brand.id}">${brand.name}</option>`);
             });
         });
 
         // Lấy dữ liệu chất liệu từ API
-        $.get('http://localhost:8080/webbangiay/api/material', function(data) {
+        $.get('http://localhost/webbangiay/api/material', function(data) {
             data.forEach(material => {
                 $('#material_id').append(`<option value="${material.id}">${material.name}</option>`);
             });
         });
-        $.get('http://localhost:8080/webbangiay/api/manufacturer', function(data) {
+        $.get('http://localhost/webbangiay/api/manufacturer', function(data) {
             data.forEach(manufacturer => {
                 $('#manufacturer_id').append(`<option value="${manufacturer.id}">${manufacturer.name}</option>`);
             });
@@ -125,7 +125,7 @@
        
         // Gửi yêu cầu AJAX
         $.ajax({
-            url: `http://localhost:8080/webbangiay/api/shoe/${shoeId}`, // Đảm bảo URL này là chính xác
+            url: `http://localhost/webbangiay/api/shoe/${shoeId}`, // Đảm bảo URL này là chính xác
             method: "POST",
             data: formData,
             processData: false,  // Không xử lý dữ liệu tự động

@@ -79,63 +79,41 @@
 
 <?php include __DIR__ . '/../shares/footer.php'; ?>
 
-<script>
-    $(document).ready(function() {
-        // Lấy dữ liệu thể loại từ API
-        $.get('http://localhost:8080/webbangiay/api/type', function(data) {
-            data.forEach(type => {
-                $('#type_id').append(`<option value="${type.id}">${type.name}</option>`);
-            });
-        });
-
-        // Lấy dữ liệu thương hiệu từ API
-        $.get('http://localhost:8080/webbangiay/api/brand', function(data) {
-            data.forEach(brand => {
-                $('#brand_id').append(`<option value="${brand.id}">${brand.name}</option>`);
-            });
-        });
-
-        // Lấy dữ liệu chất liệu từ API
-        $.get('http://localhost:8080/webbangiay/api/material', function(data) {
-            data.forEach(material => {
-                $('#material_id').append(`<option value="${material.id}">${material.name}</option>`);
-            });
-        });
-        $.get('http://localhost:8080/webbangiay/api/manufacturer', function(data) {
-            data.forEach(manufacturer => {
-                $('#manufacturer_id').append(`<option value="${manufacturer.id}">${manufacturer.name}</option>`);
-            });
-        });
-    });
-
+<script> 
     // Gửi form qua AJAX
     $("#product-form").submit(function(e) {
-        e.preventDefault();  // Ngừng hành động mặc định của form
+        e.preventDefault();  // Ngăn chặn reload trang
 
-        // Kiểm tra trường dữ liệu bắt buộc
-        if (!$("#title").val() || !$("#description").val() || !$("#price").val()) {
-            alert('Tên giày, mô tả và giá không được để trống.');
+        let title = $("#title").val().trim();
+        if (!title) {
+            alert('Tên brand không được để trống.');
             return;
         }
 
-        // Tạo đối tượng FormData để gửi dữ liệu của form, bao gồm cả file ảnh
-        let formData = new FormData(this);
+        // Dữ liệu gửi đi dưới dạng JSON
+        let brandData = {
+            title: title
+        };
 
         // Gửi yêu cầu AJAX
         $.ajax({
-            url: "http://localhost:8080/webbangiay/api/shoe", // Đảm bảo URL này là chính xác
+            url: "http://localhost/webbangiay/api/brand", // Đảm bảo API đúng
             method: "POST",
-            data: formData,
-            processData: false,  // Không xử lý dữ liệu tự động
-            contentType: false,  // Không tự động đặt content-type
+            contentType: "application/json",  // Xác định kiểu dữ liệu gửi
+            data: JSON.stringify(brandData),  // Chuyển object thành JSON
             success: function(response) {
-                alert("Thêm giày thành công!");
-                window.location.href = "index.php";  // Quay về trang danh sách
+                if (response.error) {
+                    alert("Lỗi: " + response.error);
+                } else {
+                    alert("Thêm Brand thành công!"); 
+                    window.location.href = "http://localhost/webbangiay/frontEnd/admin/views/brands/brands.php";  
+                }
             },
             error: function(xhr) {
-                console.error("Lỗi khi thêm giày:", xhr.responseText);
-                alert("Có lỗi xảy ra khi thêm giày!");
+                console.error("Lỗi khi thêm Brand:", xhr.responseText);
+                alert("Có lỗi xảy ra khi thêm Brand!");
             }
         });
     });
 </script>
+

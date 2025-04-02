@@ -45,13 +45,13 @@
                 <hr />
                 <nav class="iq-sidebar-menu">
                     <ul id="iq-sidebar-toggle" class="iq-menu">
-                        <li><a id="manage" asp-area="Admin" asp-controller="Manager" asp-action="Index">
-                            <i class="fa-solid fa-chart-line"></i> 
-                            Bảng Điều Khiển</a>
-                        </li>
-                        <li><a id="manage" asp-area="Admin" asp-controller="CategoriesManager" asp-action="Index">
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/shoemanager/index.php">
                             <i class="fa-solid fa-th-large"></i> 
-                            Thể loại</a>
+                            Danh sách giày</a>
+                        </li>
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/brands/brands.php">
+                            <i class="fa-solid fa-th-large"></i> 
+                            Danh sách thương hiệu</a>
                         </li>
                         <li><a id="manage" asp-area="Admin" asp-controller="AuthorsManager" asp-action="Index">
                             <i class="fa-solid fa-pen-nib"></i> 

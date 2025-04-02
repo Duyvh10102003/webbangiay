@@ -248,6 +248,7 @@
     }
   }
 
+  
   async function loginUser(event) {
     event.preventDefault(); // Ngăn chặn reload trang
 
@@ -255,42 +256,49 @@
     const password = document.getElementById("password").value;
 
     if (!email || !password) {
-      alert("Vui lòng nhập đầy đủ email và mật khẩu!");
-      return;
+        alert("Vui lòng nhập đầy đủ email và mật khẩu!");
+        return;
     }
 
     const loginData = {
-      email: email,
-      password: password
+        email: email,
+        password: password
     };
 
     try {
-      const response = await fetch("http://localhost/webbangiay/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(loginData)
-      });
+        const response = await fetch("http://localhost/webbangiay/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(loginData)
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (data.error) {
-        alert(data.error); // Hiển thị lỗi từ API
-      } else {
-        // alert("Đăng nhập thành công!");
-        localStorage.setItem("userToken", data.token); // Lưu token vào localStorage
-        localStorage.setItem("userInfo", JSON.stringify(data.user)); // Lưu thông tin user
+        if (data.error) {
+            alert(data.error); // Hiển thị lỗi từ API
+        } else {
+            // Lưu token và thông tin user vào localStorage
+            localStorage.setItem("userToken", data.token);
+            localStorage.setItem("userInfo", JSON.stringify(data.user));
 
-        updateUserUI();
-        // Chuyển hướng sau khi đăng nhập
-        window.location.href = "index.php";
-      }
+            updateUserUI(); // Cập nhật giao diện người dùng
+
+            // Kiểm tra vai trò của user và chuyển hướng phù hợp
+            if (data.user.role === "Admin") {
+                window.location.href = "http://localhost/webbangiay/frontEnd/admin/views/shoemanager/index.php"; 
+            } else {
+                window.location.href = "index.php"; // Nếu là User, chuyển hướng index.php
+            }
+        }
     } catch (error) {
-      console.error("Lỗi kết nối API:", error);
-      alert("Lỗi kết nối API, vui lòng thử lại!");
+        console.error("Lỗi kết nối API:", error);
+        alert("Lỗi kết nối API, vui lòng thử lại!");
     }
-  }
+}
+
+
 
   function updateUserUI() {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));

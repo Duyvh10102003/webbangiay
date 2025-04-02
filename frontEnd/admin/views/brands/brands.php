@@ -1,9 +1,9 @@
 <?php include __DIR__ . '/../shares/header.php'; ?>
 
-<h2 class="text-center mb-4">Danh sách giày</h2>
+<h2 class="text-center mb-4">Danh sách thương hiệu</h2>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <a href="create.php" class="btn btn-success btn-lg">Thêm Mới</a>
+    <a href="http://localhost/webbangiay/frontEnd/admin/views/brands/create.php" class="btn btn-success btn-lg">Thêm Mới</a>
    
   
 </div>
@@ -12,28 +12,13 @@
     <thead class="thead-dark text-center">
         <tr>
             <th class="align-top">
-                <i class="fa-solid fa-image"></i>
-                Hình ảnh
-            </th>
-            <th class="align-top">
                 <a href="">
                     <i class="fa-solid fa-book"></i> ID
-                   
                 </a>
             </th>
             <th class="align-top">
-                <a href="">
-                    <i class="fa-solid fa-book"></i> Tên Giày
-                   
-                </a>
+                <i class="fa-solid fa-book"></i> Tên thương hiệu
             </th>
-            
-            <th class="align-top">
-                <a href="">
-                    <i class="fa-solid fa-dollar-sign"></i> Giá
-                <a>
-            </th>
-            
             <th class="align-top">
                 <i class="fa-solid fa-cogs"></i> Hành Động
             </th>
@@ -87,7 +72,7 @@
 
                
     <script>
-  const API_URL = "http://localhost/webbangiay/api/shoe";
+  const API_URL = "http://localhost/webbangiay/api/brand"; // Địa chỉ API để lấy danh sách sản phẩm
 
 // Load danh sách sản phẩm
 function loadProducts() {
@@ -100,10 +85,8 @@ function loadProducts() {
       $.each(response, function(index, product) {
         html += `
           <tr>
-            <td><img src="${product.path_image}" alt="Product Image" width="100"></td>
             <td>${product.id}</td>
-            <td class="text-left">${product.title}</td>
-            <td>${parseFloat(product.price).toLocaleString()} VND</td>
+            <td class="text-left">${product.name}</td>
             <td>
               <button class="btn btn-warning btn-sm action-btn edit-btn" data-id="${product.id}">Chỉnh Sửa</button>
               <button class="btn btn-danger btn-sm action-btn delete-btn" data-id="${product.id}">Xóa</button>
