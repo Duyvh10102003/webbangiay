@@ -57,7 +57,12 @@ class ShoesModel
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
-
+    public function search($keyword)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM shoes WHERE title LIKE :keyword");
+        $stmt->execute(['keyword' => '%' . $keyword . '%']);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function addShoe($id, $path_image, $title, $price, $type_id, $brand_id, $manufacturer_id, $material_id, $description)
     {
         $errors = [];
@@ -124,7 +129,7 @@ class ShoesModel
         $clean_price = htmlspecialchars(strip_tags($price));
         $clean_description = htmlspecialchars(strip_tags($description));
 
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_STR);
         $stmt->bindParam(':path_image', $clean_path_image);
         $stmt->bindParam(':title', $clean_title);
         $stmt->bindParam(':price', $clean_price);

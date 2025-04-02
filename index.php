@@ -33,41 +33,52 @@ if ($url[0] === 'api') {
     }
 
     // Định tuyến API khác (ShoeApiController, UserApiController,...)
-    $apiControllerName = ucfirst($url[1]) . 'ApiController';
-    if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
-        require_once 'app/controllers/' . $apiControllerName . '.php';
-        $controller = new $apiControllerName();
-        $id = $url[2] ?? null;
+$apiControllerName = ucfirst($url[1]) . 'ApiController';
+if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
+    require_once 'app/controllers/' . $apiControllerName . '.php';
+    $controller = new $apiControllerName();
+    $id = $url[2] ?? null;
+    $search = $_GET['search'] ?? null; // Lấy tham số search nếu có
 
-        switch ($method) {
-            case 'GET': 
+    switch ($method) {
+        case 'GET': 
+            if ($search) {
+                $action = 'search'; // Nếu có tham số search thì gọi action search
+            } else {
                 $action = $id ? 'show' : 'index';
-                break;
-            case 'POST': 
-                $action = 'store';
-                break;
-            case 'PUT': 
-                $action = $id ? 'update' : null;
-                break;
-            case 'DELETE': 
-                $action = $id ? 'destroy' : null;
-                break;
-            default:
-                http_response_code(405);
-                echo json_encode(['message' => 'Method Not Allowed']);
-                exit;
-        }
+            }
+            break;
+        case 'POST': 
+            $action = 'store';
+            break;
+        case 'PUT': 
+            $action = $id ? 'update' : null;
+            break;
+        case 'DELETE': 
+            $action = $id ? 'destroy' : null;
+            break;
+        default:
+            http_response_code(405);
+            echo json_encode(['message' => 'Method Not Allowed']);
+            exit;
+    }
 
-        if ($action && method_exists($controller, $action)) {
-            call_user_func_array([$controller, $action], $id ? [$id] : []);
+    // Gọi phương thức search và truyền tham số search vào
+    if ($action && method_exists($controller, $action)) {
+        if ($action === 'search') {
+            // Truyền tham số search vào phương thức search
+            call_user_func_array([$controller, $action], [$search]);
         } else {
-            http_response_code(404);
-            echo json_encode(['message' => 'Action not found']);
+            call_user_func_array([$controller, $action], $id ? [$id] : []);
         }
-        exit;
     } else {
         http_response_code(404);
-        echo json_encode(['message' => 'Controller not found']);
-        exit;
+        echo json_encode(['message' => 'Action not found']);
     }
+    exit;
+} else {
+    http_response_code(404);
+    echo json_encode(['message' => 'Controller not found']);
+    exit;
+}
 }
