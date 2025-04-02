@@ -147,6 +147,7 @@
                     if (data.status === "success") {
                         alert("Sản phẩm đã được thêm vào giỏ hàng!");
                         updateCartUI(data.cart); // Gọi lại hàm cập nhật giao diện giỏ hàng
+                        
                     } else {
                         alert("Lỗi khi thêm sản phẩm vào giỏ hàng.");
                     }
@@ -161,6 +162,7 @@
                 cartCount.textContent = Object.keys(cart).length; // Cập nhật số lượng giỏ hàng
             }
         }
+        
     </script>
 
 
