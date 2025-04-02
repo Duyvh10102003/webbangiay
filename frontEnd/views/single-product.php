@@ -57,9 +57,11 @@
                         <div class="quantity-box">
                             <label for="quantity-product">Số lượng</label>
                             <div class="quantity-content">
-                                <span class="input-group-addon product_quantity_down" onclick="up_down_quantity('-')">-</span>
+                                <span class="input-group-addon product_quantity_down"
+                                    onclick="up_down_quantity('-')">-</span>
                                 <input type="text" id="quantity-product" class="form-control" name="quantity" value="1">
-                                <span class="input-group-addon product_quantity_up" onclick="up_down_quantity('+')">+</span>
+                                <span class="input-group-addon product_quantity_up"
+                                    onclick="up_down_quantity('+')">+</span>
                             </div>
                         </div>
                     </div>
@@ -74,7 +76,7 @@
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const urlParams = new URLSearchParams(window.location.search);
             const shoeId = urlParams.get("id");
 
@@ -95,9 +97,23 @@
                         }).format(shoe.price);
                         document.getElementById("shoe-description").textContent = shoe.description;
 
-                        document.getElementById("order-button").setAttribute("onclick",
-                            `add_shop_card('${shoe.id}', '${shoe.price}', document.getElementById('quantity-product').value)`
-                        );
+                        const orderButton = document.getElementById("order-button");
+                        const quantityInput = document.getElementById("quantity-product");
+
+                        if (orderButton && quantityInput) {
+                            orderButton.onclick = () => {
+                                const quantity = parseInt(quantityInput.value, 10) || 0;
+
+                                if (quantity <= 0) {
+                                    alert("Vui lòng nhập số lượng hợp lệ.");
+                                    return;
+                                }
+
+                                add_shop_cart(shoe.id, shoe.price, quantity);
+                            };
+                        } else {
+                            console.error("Lỗi: Không tìm thấy phần tử order-button hoặc quantity-product.");
+                        }
 
                     })
                     .catch(error => console.error("Lỗi khi lấy dữ liệu sản phẩm:", error));
@@ -118,43 +134,69 @@
             //console.log("up_down_quantity:", currentValue);
         };
 
-        // document.addEventListener("DOMContentLoaded", function() {
-        //     document.getElementById("order-button").addEventListener("click", function() {
-        //         add_shop_card();
-        //     });
-        // });
+        function add_shop_cart(productId, price, quantity) {
+            console.log(`Thêm sản phẩm vào giỏ: ID=${productId}, Giá=${price}, Số lượng=${quantity}`);
 
-        function add_shop_card(productId, price, quantity) {
-            console.log("Thêm sản phẩm vào giỏ: " + productId + ", giá: " + price + ", Số lượng: " + quantity);
+            // Get user info from local storage
+            const userInfoString = localStorage.getItem('userInfo');
+            if (!userInfoString) {
+                alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");
+                return;
+            }
 
-            // Dữ liệu sản phẩm cần thêm vào giỏ hàng
-            let productData = {
+            const userInfo = JSON.parse(userInfoString);
+            const userId = userInfo?.id;
+
+            if (!userId) {
+                alert("Thông tin người dùng không hợp lệ.");
+                return;
+            }
+
+            // Ensure quantity is a valid number
+            quantity = parseInt(quantity, 10);
+            if (isNaN(quantity) || quantity <= 0) {
+                alert("Số lượng sản phẩm không hợp lệ.");
+                return;
+            }
+
+            // Construct the product data object
+            const productData = {
+                user_id: userId,
                 product_id: productId,
                 quantity: quantity,
-                price: price
+                price: parseFloat(price) // Ensure price is a valid number
             };
-            console.log("productData:", productData);
-            // Gửi dữ liệu đến API bằng Fetch API
+
+            console.log("Gửi dữ liệu sản phẩm:", productData);
+
+            // Send data to API using Fetch API
             fetch('http://localhost/webbangiay/api/cart', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(productData)
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productData)
+            })
+                .then(async (response) => {
+                    if (!response.ok) {
+                        throw new Error(`Lỗi HTTP: ${response.status}`);
+                    }
+                    return response.json();
                 })
-                .then(response => response.json())
-                .then(data => {
+                .then((data) => {
                     if (data.status === "success") {
                         alert("Sản phẩm đã được thêm vào giỏ hàng!");
-                        location.reload(); // Tải lại trang để cập nhật giỏ hàng
-                        updateCartUI(data.cart); // Gọi lại hàm cập nhật giao diện giỏ hàng
-                        
+                        updateCartUI(data.cart); // Update cart UI
                     } else {
-                        alert("Lỗi khi thêm sản phẩm vào giỏ hàng.");
+                        alert(`Lỗi khi thêm sản phẩm vào giỏ hàng: ${data.message || "Không xác định"}`);
                     }
                 })
-                .catch(error => console.error("Lỗi:", error));
+                .catch((error) => {
+                    console.error("Lỗi khi gửi yêu cầu:", error);
+                    alert("Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng. Vui lòng thử lại!");
+                });
         }
+
 
         // Hàm cập nhật giao diện giỏ hàng
         function updateCartUI(cart) {
@@ -163,7 +205,6 @@
                 cartCount.textContent = Object.keys(cart).length; // Cập nhật số lượng giỏ hàng
             }
         }
-        
     </script>
 
 

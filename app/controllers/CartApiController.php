@@ -13,36 +13,51 @@ class CartApiController
     }
 
     // Thêm sản phẩm vào giỏ hàng (POST /api/cart)
-    public function store()
-    {
-        header("Content-Type: application/json");
-        $data = json_decode(file_get_contents("php://input"), true);
+    // Thêm sản phẩm vào giỏ hàng (POST /api/cart)
+function store()
+{
+    header("Content-Type: application/json");
 
-        if (!isset($data['product_id']) || !isset($data['quantity']) || !isset($data['price'])) {
-            echo json_encode(["status" => "error", "message" => "Invalid request"]);
-            return;
-        }
+    // Lấy dữ liệu từ request body
+    $data = json_decode(file_get_contents("php://input"), true);
 
-        if (!isset($_SESSION['cart'])) {
-            $_SESSION['cart'] = [];
-        }
-
-        $product_id = $data['product_id'];
-        $quantity = $data['quantity'];
-        $price = $data['price'];
-
-        // Nếu sản phẩm đã có trong giỏ, cập nhật số lượng và tổng giá
-        if (isset($_SESSION['cart'][$product_id])) {
-            $_SESSION['cart'][$product_id]['quantity'] += $quantity;
-        } else {
-            $_SESSION['cart'][$product_id] = [
-                'quantity' => $quantity,
-                'price' => $price
-            ];
-        }
-
-        echo json_encode(["status" => "success", "cart" => $_SESSION['cart']]);
+    // Kiểm tra dữ liệu đầu vào hợp lệ
+    if (!isset($data['product_id'], $data['quantity'], $data['price'], $data['user_id'])) {
+        echo json_encode(["status" => "error", "message" => "Invalid request"]);
+        return;
     }
+
+    // Lấy dữ liệu từ request
+    $user_id = $data['user_id'];
+    $product_id = $data['product_id'];
+    $quantity = (int)$data['quantity'];
+    $price = (float)$data['price'];
+
+    // Kiểm tra số lượng sản phẩm hợp lệ
+    if ($quantity <= 0) {
+        echo json_encode(["status" => "error", "message" => "Invalid quantity"]);
+        return;
+    }
+
+    // Nếu giỏ hàng của user chưa tồn tại, khởi tạo
+    if (!isset($_SESSION['cart'][$user_id])) {
+        $_SESSION['cart'][$user_id] = [];
+    }
+
+    // Nếu sản phẩm đã có trong giỏ hàng của user, cập nhật số lượng
+    if (isset($_SESSION['cart'][$user_id][$product_id])) {
+        $_SESSION['cart'][$user_id][$product_id]['quantity'] += $quantity;
+    } else {
+        $_SESSION['cart'][$user_id][$product_id] = [
+            'quantity' => $quantity,
+            'price' => $price
+        ];
+    }
+
+    // Trả về giỏ hàng đã cập nhật
+    echo json_encode(["status" => "success", "cart" => $_SESSION['cart'][$user_id]]);
+}
+
 
     // Lấy chi tiết sản phẩm trong giỏ hàng (GET /api/cart/{product_id})
     public function show($product_id)

@@ -347,7 +347,7 @@
       cartList.innerHTML = ''; // Xóa danh sách hiện tại
 
       // Duyệt qua các sản phẩm trong giỏ hàng và thêm vào danh sách
-      Object.keys(cart).forEach(product_id => {
+      Object.keys(cart).forEach(user_id => {
         const product = cart[product_id];
         const listItem = document.createElement('li');
         listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-sm');
