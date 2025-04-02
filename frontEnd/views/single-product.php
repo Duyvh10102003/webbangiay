@@ -146,6 +146,7 @@
                 .then(data => {
                     if (data.status === "success") {
                         alert("Sản phẩm đã được thêm vào giỏ hàng!");
+                        location.reload(); // Tải lại trang để cập nhật giỏ hàng
                         updateCartUI(data.cart); // Gọi lại hàm cập nhật giao diện giỏ hàng
                         
                     } else {

@@ -1,3 +1,5 @@
+
+
 <?php
 require_once "app/models/UserModel.php";
 require_once "app/config/database.php";
@@ -44,6 +46,8 @@ class AuthApiController
         $user = $this->userModel->login($data->email, $data->password);
 
         if ($user) {
+            $redirectUrl = ($user["role"] === "Admin") ? "/admin.php" : "/index.php";
+
             echo json_encode([
                 "message" => "Đăng nhập thành công",
                 "user" => [
@@ -52,10 +56,68 @@ class AuthApiController
                     "email" => $user["email"],
                     "role" => $user["role"]
                 ],
+                "redirectUrl" => $redirectUrl,
                 "token" => bin2hex(random_bytes(32)) // Token giả lập
             ]);
         } else {
             echo json_encode(["error" => "Sai email hoặc mật khẩu"]);
         }
+        
+    }
+
+    // 🟢 Đăng xuất
+    public function logout()
+    {
+        header("Content-Type: application/json");
+        // Xóa token hoặc thực hiện các thao tác khác để đăng xuất
+        echo json_encode(["message" => "Đăng xuất thành công"]);
+    }
+
+    // 🟢 Lấy thông tin người dùng theo ID
+    public function show($userId)
+    {
+        
+        $user = $this->userModel->getUserById($userId);
+
+        if ($user) {
+            echo json_encode($user);
+        } else {
+            echo json_encode(["error" => "Người dùng không tồn tại"]);
+        }
+    }
+    // 🟢 Cập nhật thông tin người dùng
+    public function update($userId)
+    {
+        header("Content-Type: application/json");
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (empty($userId) || empty($data)) {
+            return;
+        }
+
+        $result = $this->userModel->updateuser($userId, $data['username'] ?? null, $data['email'] ?? null);
+
+        echo json_encode($result);
+    }
+    // 🟢 Xóa người dùng
+    public function destroy($userId)
+    {
+        header("Content-Type: application/json");
+        $result = $this->userModel->deleteuser($userId);
+
+        echo json_encode($result);
+    }
+    // 🟢 Lấy danh sách người dùng
+    public function index()
+    {
+        header("Content-Type: application/json");
+        $users = $this->userModel->getAllUsers();
+
+        if ($users) {
+            echo json_encode($users);
+        } else {
+            echo json_encode(["error" => "Không có người dùng nào"]);
+        }
     }
 }
+
