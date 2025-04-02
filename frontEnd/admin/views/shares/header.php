@@ -4,7 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>TRANG QUẢN TRỊ TVQ BOOKS</title>
+    <title>TRANG QUẢN TRỊ Sharp</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/dataTables.bootstrap4.min.css">
@@ -29,7 +29,7 @@
                 <a id="manage" asp-area="Admin" asp-controller="Manager" asp-action="Index" class="header-logo">
                     <img src="../../assets/images/logo.png" class="img-fluid rounded-normal" alt="">
                     <div class="logo-title">
-                        <span class="text-primary text-uppercase">TVQ BOOKS</span>
+                        <span class="text-primary text-uppercase">SHARP</span>
                     </div>
                 </a>
                 <div class="iq-menu-bt-sidebar">
@@ -53,13 +53,13 @@
                             <i class="fa-solid fa-th-large"></i> 
                             Danh sách thương hiệu</a>
                         </li>
-                        <li><a id="manage" asp-area="Admin" asp-controller="AuthorsManager" asp-action="Index">
-                            <i class="fa-solid fa-pen-nib"></i> 
-                            Tác Giả</a>
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/material/materials.php">
+                            <i class="fa-solid fa-th-large"></i> 
+                            Danh sách nguyên liệu</a>
                         </li>
-                        <li><a id="manage" asp-area="Admin" asp-controller="BooksManager" asp-action="Index">
-                            <i class="fa-solid fa-book"></i> 
-                            Sách</a>
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/type/types.php">
+                            <i class="fa-solid fa-th-large"></i> 
+                            Danh sách loại</a>
                         </li>
                         <li><a id="manage" asp-area="Admin" asp-controller="User" asp-action="Index">
                             <i class="fa-solid fa-user"></i> 

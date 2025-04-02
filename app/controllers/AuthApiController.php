@@ -46,8 +46,7 @@ class AuthApiController
         $user = $this->userModel->login($data->email, $data->password);
 
         if ($user) {
-            $redirectUrl = ($user["role"] === "Admin") ? "/admin.php" : "/index.php";
-
+    
             echo json_encode([
                 "message" => "Đăng nhập thành công",
                 "user" => [
@@ -56,7 +55,7 @@ class AuthApiController
                     "email" => $user["email"],
                     "role" => $user["role"]
                 ],
-                "redirectUrl" => $redirectUrl,
+              
                 "token" => bin2hex(random_bytes(32)) // Token giả lập
             ]);
         } else {
