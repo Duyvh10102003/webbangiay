@@ -4,7 +4,6 @@ require_once 'app/models/ShoesModel.php';
 require_once 'app/controllers/ShoeApiController.php';
 require_once 'app/controllers/AuthApiController.php';
 // Start session
-
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
 $url = filter_var($url, FILTER_SANITIZE_URL);
@@ -31,7 +30,7 @@ if ($url[0] === 'api') {
         }
         exit;
     }
-
+    
     // Định tuyến API khác (ShoeApiController, UserApiController,...)
     $apiControllerName = ucfirst($url[1]) . 'ApiController';
     if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
@@ -44,7 +43,7 @@ if ($url[0] === 'api') {
                 $action = $id ? 'show' : 'index';
                 break;
             case 'POST': 
-                $action = 'store';
+                $action = $id ? 'edit' : 'store';
                 break;
             case 'PUT': 
                 $action = $id ? 'update' : null;
