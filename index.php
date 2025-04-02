@@ -17,13 +17,15 @@ $action = isset($url[1]) && $url[1] != '' ? $url[1] : 'index';
 if ($url[0] === 'api') {
     $method = $_SERVER['REQUEST_METHOD'];
 
-    if ($url[1] === 'register' || $url[1] === 'login') {
+    if ($url[1] === 'register' || $url[1] === 'login'|| $url[1] === 'logout') {
         $apiController = new AuthApiController();
 
         if ($url[1] === 'register' && $method === 'POST') {
             $apiController->register();
-        } elseif ($url[1] === 'login' && $method === 'POST') {
+        }elseif ($url[1] === 'login' && $method === 'POST') {
             $apiController->login();
+        }elseif ($url[1] === 'logout' && $method === 'POST') {
+                $apiController->logout();
         } else {
             http_response_code(405);
             echo json_encode(['message' => 'Method Not Allowed']);

@@ -13,7 +13,6 @@ class CartApiController
     }
 
     // Thêm sản phẩm vào giỏ hàng (POST /api/cart)
-    // Thêm sản phẩm vào giỏ hàng (POST /api/cart)
 function store()
 {
     header("Content-Type: application/json");
@@ -60,31 +59,35 @@ function store()
 
 
     // Lấy chi tiết sản phẩm trong giỏ hàng (GET /api/cart/{product_id})
-    public function show($product_id)
-    {
-        header("Content-Type: application/json");
+    public function show($userid)
+{
+    header("Content-Type: application/json");
 
-        if (!isset($_SESSION['cart'][$product_id])) {
-            echo json_encode(["status" => "error", "message" => "Product not found in cart"]);
-            return;
-        }
-
-        echo json_encode(["status" => "success", "product" => $_SESSION['cart'][$product_id]]);
+    // Kiểm tra nếu giỏ hàng của người dùng có tồn tại trong session
+    if (!isset($_SESSION['cart'][$userid])) {
+        echo json_encode(["status" => "error", "message" => "Cart not found for user"]);
+        return;
     }
+
+    // Trả về giỏ hàng của người dùng
+    $cart = $_SESSION['cart'][$userid];
+    echo json_encode(["status" => "success", "cart" => $cart]);
+}
+
 
     // Xóa sản phẩm khỏi giỏ hàng (DELETE /api/cart/{product_id})
-    public function destroy($product_id)
-    {
-        header("Content-Type: application/json");
+    // public function destroy($product_id)
+    // {
+    //     header("Content-Type: application/json");
 
-        if (!isset($_SESSION['cart'][$product_id])) {
-            echo json_encode(["status" => "error", "message" => "Product not found in cart"]);
-            return;
-        }
+    //     if (!isset($_SESSION['cart'][$product_id])) {
+    //         echo json_encode(["status" => "error", "message" => "Product not found in cart"]);
+    //         return;
+    //     }
 
-        unset($_SESSION['cart'][$product_id]);
-        echo json_encode(["status" => "success", "cart" => $_SESSION['cart']]);
-    }
+    //     unset($_SESSION['cart'][$product_id]);
+    //     echo json_encode(["status" => "success", "cart" => $_SESSION['cart']]);
+    // }
 
     // Xóa toàn bộ giỏ hàng (DELETE /api/cart)
     public function clearCart()

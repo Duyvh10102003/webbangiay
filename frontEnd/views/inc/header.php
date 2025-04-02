@@ -327,17 +327,30 @@
 
 
   document.addEventListener("DOMContentLoaded", function() {
+
+    // Get user info from local storage
+    const userInfoString = localStorage.getItem('userInfo');
+      if (!userInfoString) {
+        alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");
+        return;
+      }
+
+    const userInfo = JSON.parse(userInfoString);
+    const userid = userInfo?.id;
+
+
     // Lấy giỏ hàng từ API khi trang tải xong
-    fetch('http://localhost/webbangiay/api/cart')
+    
+    fetch(`http://localhost/webbangiay/api/cart/${userid}`) 
       .then(response => response.json())
       .then(data => {
-        if (data.status === 'success') {
-          updateCartUI(data.cart);
-        } else {
-          console.error('Error fetching cart data');
-        }
-      })
-      .catch(error => console.error('Error:', error));
+      if (data.status === 'success') {
+        updateCartUI(data.cart); 
+      } else {
+        console.error('Error fetching cart data: ' + data.message);
+      }
+    })
+    .catch(error => console.error('Error:', error));
 
     // Cập nhật giỏ hàng trên giao diện người dùng
     function updateCartUI(cart) {
@@ -347,29 +360,27 @@
       cartList.innerHTML = ''; // Xóa danh sách hiện tại
 
       // Duyệt qua các sản phẩm trong giỏ hàng và thêm vào danh sách
-      Object.keys(cart).forEach(user_id => {
-        const product = cart[product_id];
-        const listItem = document.createElement('li');
-        listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-sm');
+        Object.keys(cart).forEach(product_id => {
+          const product = cart[product_id];
+          const listItem = document.createElement('li');
+          listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-sm');
 
-        const productName = `${product_id}`; // Có thể thay bằng tên sản phẩm thật
-        const productDescription = 'Brief description'; // Thêm mô tả sản phẩm
-        const productPrice = `${(product.quantity * product.price).toLocaleString('vi-VN')} VND`;
+          const productName = `${product_id}`; // Có thể thay bằng tên sản phẩm thật
+          const productPrice = `${(product.quantity * product.price).toLocaleString('vi-VN')} VND`;
 
-        listItem.innerHTML = `
+          listItem.innerHTML = `
                 <div>
                     <h6 class="my-0">${productName}</h6>
-                    <small class="text-body-secondary">${productDescription}</small>
                 </div>
                 <span class="text-body-secondary">${productPrice}</span>
             `;
 
-        // Thêm sản phẩm vào danh sách giỏ hàng
-        cartList.appendChild(listItem);
+          // Thêm sản phẩm vào danh sách giỏ hàng
+          cartList.appendChild(listItem);
 
-        // Cập nhật tổng tiền
-        total += product.quantity * product.price;
-      });
+          // Cập nhật tổng tiền
+          total += product.quantity * product.price;
+        });
 
       // Cập nhật số lượng giỏ hàng
       cartCount.textContent = Object.keys(cart).length;
