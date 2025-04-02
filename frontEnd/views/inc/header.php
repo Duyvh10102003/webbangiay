@@ -341,16 +341,16 @@
 
     // Lấy giỏ hàng từ API khi trang tải xong
     
-fetch(`http://localhost/webbangiay/api/cart/${userid}`) // Chú ý là `${userid}` sẽ được thay thế bằng giá trị thực của userid
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === 'success') {
-      updateCartUI(data.cart); // Giả sử bạn có hàm updateCartUI để cập nhật giao diện giỏ hàng
-    } else {
-      console.error('Error fetching cart data: ' + data.message);
-    }
-  })
-  .catch(error => console.error('Error:', error));
+    fetch(`http://localhost/webbangiay/api/cart/${userid}`) 
+      .then(response => response.json())
+      .then(data => {
+      if (data.status === 'success') {
+        updateCartUI(data.cart); 
+      } else {
+        console.error('Error fetching cart data: ' + data.message);
+      }
+    })
+    .catch(error => console.error('Error:', error));
 
     // Cập nhật giỏ hàng trên giao diện người dùng
     function updateCartUI(cart) {

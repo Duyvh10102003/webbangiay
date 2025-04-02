@@ -34,7 +34,6 @@ class ShoesModel
 
     public function searchShoes($searchQuery)
     {
-        // Add wildcards for partial match
         $searchQuery = "%" . $searchQuery . "%";
     
         $query = "SELECT 
@@ -62,9 +61,7 @@ class ShoesModel
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':searchQuery', $searchQuery, PDO::PARAM_STR);
         $stmt->execute();
-    
-        // Fetch all results as an associative array
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Changed to fetchAll for multiple results
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);  
     }
     
     
