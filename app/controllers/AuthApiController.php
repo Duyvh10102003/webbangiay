@@ -64,14 +64,6 @@ class AuthApiController
         
     }
 
-    // 🟢 Đăng xuất
-    public function logout()
-    {
-        header("Content-Type: application/json");
-        // Xóa token hoặc thực hiện các thao tác khác để đăng xuất
-        echo json_encode(["message" => "Đăng xuất thành công"]);
-    }
-
     // 🟢 Lấy thông tin người dùng theo ID
     public function show($userId)
     {

@@ -44,10 +44,10 @@
                         </div>
                         <div class="col-sm-8-detail">
                             <span class="price">
-                                <span class="title-price">Giá: </span>
+                                <span class="title-price">Price: </span>
                                 <span class="price-real" id="shoe-price"></span>
                             </span>
-                            <span class="notify">MIỄN PHÍ VẬN CHUYỂN TOÀN QUỐC KHI ĐẶT HÀNG ONLINE</span>
+                            <span class="notify">FREE SHIPPING NATIONWIDE WHEN ORDERING ONLINE</span>
 
                         </div>
                     </div>
@@ -55,7 +55,7 @@
 
                     <div class="box-option">
                         <div class="quantity-box">
-                            <label for="quantity-product">Số lượng</label>
+                            <label for="quantity-product">Quantity</label>
                             <div class="quantity-content">
                                 <span class="input-group-addon product_quantity_down"
                                     onclick="up_down_quantity('-')">-</span>
@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="box-option">
-                        <button class="button-card" id="order-button">ĐẶT HÀNG</button>
+                        <button class="button-card" id="order-button">BUY</button>
                     </div>
                 </div>
             </div>
@@ -88,9 +88,9 @@
                         document.getElementById("shoe-title").textContent = shoe.title;
                         document.getElementById("shoe-id").textContent = " - " + shoe.id;
                         document.getElementById("shoe-id-text").textContent = "ID: " + shoe.id;
-                        document.getElementById("shoe-material").textContent = "Chất liệu: " + shoe.material;
-                        document.getElementById("shoe-brand").textContent = "Thương hiệu: " + shoe.brand;
-                        document.getElementById("shoe-manufacturer").textContent = "Sản xuất: " + shoe.manufacturer;
+                        document.getElementById("shoe-material").textContent = "Material: " + shoe.material;
+                        document.getElementById("shoe-brand").textContent = "Brand: " + shoe.brand;
+                        document.getElementById("shoe-manufacturer").textContent = "Manufacturer: " + shoe.manufacturer;
                         document.getElementById("shoe-price").textContent = new Intl.NumberFormat('vi-VN', {
                             style: 'currency',
                             currency: 'VND'
@@ -186,6 +186,7 @@
                 .then((data) => {
                     if (data.status === "success") {
                         alert("Sản phẩm đã được thêm vào giỏ hàng!");
+                        location.reload(); // Tải lại trang để cập nhật giỏ hàng
                         updateCartUI(data.cart); // Update cart UI
                     } else {
                         alert(`Lỗi khi thêm sản phẩm vào giỏ hàng: ${data.message || "Không xác định"}`);

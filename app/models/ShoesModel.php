@@ -32,7 +32,42 @@ class ShoesModel
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-
+    public function searchShoes($searchQuery)
+    {
+        // Add wildcards for partial match
+        $searchQuery = "%" . $searchQuery . "%";
+    
+        $query = "SELECT 
+                    p.id, 
+                    p.path_image, 
+                    p.title, 
+                    p.price, 
+                    t.name AS type, 
+                    b.name AS brand, 
+                    m.name AS manufacturer, 
+                    mat.name AS material, 
+                    p.description
+                  FROM {$this->table_name} p
+                  LEFT JOIN types t ON p.type_id = t.id
+                  LEFT JOIN brands b ON p.brand_id = b.id
+                  LEFT JOIN manufacturers m ON p.manufacturer_id = m.id
+                  LEFT JOIN materials mat ON p.material_id = mat.id
+                  WHERE p.id LIKE :searchQuery 
+                  OR p.title LIKE :searchQuery
+                  OR p.description LIKE :searchQuery
+                  OR t.name LIKE :searchQuery 
+                  OR b.name LIKE :searchQuery 
+                  OR mat.name LIKE :searchQuery";
+    
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':searchQuery', $searchQuery, PDO::PARAM_STR);
+        $stmt->execute();
+    
+        // Fetch all results as an associative array
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Changed to fetchAll for multiple results
+    }
+    
+    
     public function getShoeById($id)
     {
         $query = "SELECT 
