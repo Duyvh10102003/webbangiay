@@ -89,7 +89,7 @@
 
                
     <script>
-  const API_URL = "http://localhost/saleshoe/api/product";
+  const API_URL = "http://localhost/webbangiay/api/shoe";
 
 // Load danh sách sản phẩm
 function loadProducts() {
