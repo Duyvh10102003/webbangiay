@@ -94,14 +94,16 @@ public function edit($id)
 {
     header('Content-Type: application/json');
 
+    // Lấy dữ liệu sản phẩm hiện tại từ DB
     $currentShoe = $this->shoeModel->getShoeById($id);
     if (!$currentShoe) {
         http_response_code(404);
         echo json_encode(['message' => 'Shoe not found']);
         return;
     }
-    // Kiểm tra xem có file ảnh được upload không
-    $path_image = $currentShoe->path_image;
+
+    // Giữ nguyên ảnh cũ nếu không upload ảnh mới
+    $path_image = $currentShoe->path_image; // Truy cập thuộc tính object đúng cách
     if (!empty($_FILES['path_image']['name'])) {
         $upload_dir = __DIR__ . "/../../public/images/"; // Thư mục lưu ảnh
         $file_name = time() . "_" . basename($_FILES['path_image']['name']); // Đổi tên file để tránh trùng lặp
