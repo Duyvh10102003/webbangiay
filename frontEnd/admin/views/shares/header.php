@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -46,28 +47,28 @@
                 <nav class="iq-sidebar-menu">
                     <ul id="iq-sidebar-toggle" class="iq-menu">
                         <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/shoemanager/index.php">
-                            <i class="fa-solid fa-th-large"></i> 
-                            Danh sách giày</a>
+                                <i class="fa-solid fa-th-large"></i>
+                                Danh sách giày</a>
                         </li>
                         <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/brands/brands.php">
-                            <i class="fa-solid fa-th-large"></i> 
-                            Danh sách thương hiệu</a>
+                                <i class="fa-solid fa-th-large"></i>
+                                Danh sách thương hiệu</a>
                         </li>
                         <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/material/materials.php">
-                            <i class="fa-solid fa-th-large"></i> 
-                            Danh sách nguyên liệu</a>
+                                <i class="fa-solid fa-th-large"></i>
+                                Danh sách nguyên liệu</a>
                         </li>
                         <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/type/types.php">
-                            <i class="fa-solid fa-th-large"></i> 
-                            Danh sách loại</a>
+                                <i class="fa-solid fa-th-large"></i>
+                                Danh sách loại</a>
                         </li>
-                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/user/index.php">
-                            <i class="fa-solid fa-user"></i> 
-                            Tài khoản</a>
+                        <li><a id="manage" asp-area="Admin" asp-controller="User" asp-action="Index">
+                                <i class="fa-solid fa-user"></i>
+                                Tài khoản</a>
                         </li>
                         <li><a id="manage" asp-area="Admin" asp-controller="OrderManagement" asp-action="ManageOrders">
-                            <i class="fa-solid fa-box"></i>
-                            Đơn hàng</a>
+                                <i class="fa-solid fa-box"></i>
+                                Đơn hàng</a>
                         </li>
                     </ul>
                 </nav>
@@ -75,9 +76,10 @@
                     <div class="iq-card">
                         <div class="iq-card-body">
                             <div class="sidebar-bottom-content">
-                                <a class="btn w-100 btn-primary mt-4 view-more" asp-area="" asp-controller="Home" asp-action="Index">
+                                <a class="btn w-100 btn-primary mt-4 view-more" href="http://localhost/webbangiay/frontEnd/views/index.php">
                                     <i class="fa-solid fa-home"></i>
-                                    Trang chủ</a>
+                                    Trang chủ
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -98,7 +100,7 @@
                             <a href="index.html" class="header-logo">
                                 <img src="../../assets/images/logo.png" class="img-fluid rounded-normal" alt="">
                                 <div class="logo-title">
-                                    <span class="text-primary text-uppercase">TVQ BOOKS</span>
+                                    <span class="text-primary text-uppercase">SPARK</span>
                                 </div>
                             </a>
                         </div>
@@ -109,15 +111,10 @@
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Toggle navigation">
                         <i class="ri-menu-3-line"></i>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent" >
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ml-auto navbar-list">
-                            <li >
-                                <form class="form-inline" >
-                                    <button type="submit" class="nav-link btn btn-link text-dark" >
-                                        <i class="fa-solid fa-right-from-bracket" style="font-size: 20px;"></i>
-                                        <span style="font-size: 20px;"><strong>Đăng xuất</strong></span>
-                                    </button>
-                                </form>
+                            <li>
+                                
                             </li>
                         </ul>
                     </div>
