@@ -24,8 +24,6 @@ if ($url[0] === 'api') {
             $apiController->register();
         }elseif ($url[1] === 'login' && $method === 'POST') {
             $apiController->login();
-        }elseif ($url[1] === 'logout' && $method === 'POST') {
-                $apiController->logout();
         } else {
             http_response_code(405);
             echo json_encode(['message' => 'Method Not Allowed']);
