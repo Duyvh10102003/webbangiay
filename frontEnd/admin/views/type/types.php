@@ -45,9 +45,9 @@
 
                
     <script>
-  const API_URL = "http://localhost/webbangiay/api/type"; // Địa chỉ API để lấy danh sách sản phẩm
+  const API_URL = "http://localhost/webbangiay/api/type"; // Địa chỉ API để lấy danh sách loại sản phẩm
 
-// Load danh sách sản phẩm
+// Load danh sách loại sản phẩm
 function loadProducts() {
   $.ajax({
     url: API_URL,
@@ -78,7 +78,7 @@ function loadProducts() {
 
 
 
-// Load sản phẩm khi trang được tải
+// Load loại sản phẩm khi trang được tải
 $(document).ready(function() {
   loadProducts();
 });
@@ -88,7 +88,7 @@ $(document).on("click", ".edit-btn", function() {
     window.location.href = `edit.php?id=${productId}`;  // Chuyển hướng đến trang edit.php
 });
 
-// Xóa sản phẩm
+// Xóa loại sản phẩm
 $(document).on("click", ".delete-btn", function() {
     let productId = $(this).data("id");
     if (confirm("Bạn có chắc chắn muốn xóa?")) {
@@ -96,8 +96,8 @@ $(document).on("click", ".delete-btn", function() {
             url: `${API_URL}/${productId}`, // Gửi yêu cầu DELETE đến API
             method: "DELETE",
             success: function(response) {
-                alert("Xóa thành công!");
-                loadProducts(); // Tải lại danh sách sản phẩm
+                alert("Xóa loại sản phẩm thành công!");
+                loadProducts(); // Tải lại danh sách loại sản phẩm
             },
             error: function(xhr) {
                 console.error("Lỗi khi :", xhr.responseText);

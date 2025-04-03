@@ -72,9 +72,9 @@
 
                
     <script>
-  const API_URL = "http://localhost/webbangiay/api/brand"; // Địa chỉ API để lấy danh sách sản phẩm
+  const API_URL = "http://localhost/webbangiay/api/brand"; // Địa chỉ API để lấy danh sách thương hiệu
 
-// Load danh sách sản phẩm
+// Load danh sách thương hiệu
 function loadProducts() {
   $.ajax({
     url: API_URL,
@@ -105,7 +105,7 @@ function loadProducts() {
 
 
 
-// Load sản phẩm khi trang được tải
+// Load thương hiệu khi trang được tải
 $(document).ready(function() {
   loadProducts();
 });
@@ -115,20 +115,20 @@ $(document).on("click", ".edit-btn", function() {
     window.location.href = `edit.php?id=${productId}`;  // Chuyển hướng đến trang edit.php
 });
 
-// Xóa sản phẩm
+// Xóa thương hiệu
 $(document).on("click", ".delete-btn", function() {
     let productId = $(this).data("id");
-    if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
+    if (confirm("Bạn có chắc chắn muốn xóa thương hiệu này?")) {
         $.ajax({
             url: `${API_URL}/${productId}`, // Gửi yêu cầu DELETE đến API
             method: "DELETE",
             success: function(response) {
-                alert("Xóa sản phẩm thành công!");
-                loadProducts(); // Tải lại danh sách sản phẩm
+                alert("Xóa thương hiệu thành công!");
+                loadProducts(); // Tải lại danh sách thương hiệu
             },
             error: function(xhr) {
-                console.error("Lỗi khi xóa sản phẩm:", xhr.responseText);
-                alert("Có lỗi xảy ra khi xóa sản phẩm!");
+                console.error("Lỗi khi xóa thương hiệu:", xhr.responseText);
+                alert("Có lỗi xảy ra khi xóa thương hiệu!");
             }
         });
     }

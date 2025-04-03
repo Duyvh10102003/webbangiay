@@ -23,7 +23,7 @@
             <!-- Nút hành động -->
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-success btn-lg">Thêm</button>
-                <a href="index.php" class="btn btn-secondary btn-lg ml-3">Quay về danh sách</a>
+                <a href="manufacturer.php" class="btn btn-secondary btn-lg ml-3">Quay về danh sách</a>
             </div>
         </form>
     </div>
@@ -50,7 +50,7 @@
                 contentType: "application/json", // Định dạng JSON
                 data: JSON.stringify(requestData), // Chuyển dữ liệu thành JSON
                 success: function(response) {
-                    alert("Thêm Brand thành công!");
+                    alert("Thêm Nhà sản xuất thành công!");
                     window.location.href = "http://localhost/webbangiay/frontEnd/admin/views/manufacturer/manufacturer.php";  
                 },
                 error: function(xhr) {

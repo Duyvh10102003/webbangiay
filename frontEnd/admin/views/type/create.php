@@ -54,7 +54,7 @@
                     window.location.href = "http://localhost/webbangiay/frontEnd/admin/views/type/types.php";  
                 },
                 error: function(xhr) {
-                    console.error("Lỗi khi thêm nguyê liệu:", xhr.responseText);
+                    console.error("Lỗi khi thêm loại sản phẩm:", xhr.responseText);
                     alert("Có lỗi xảy ra khi thêm loại!");
                 }
             });

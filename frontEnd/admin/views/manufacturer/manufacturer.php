@@ -118,17 +118,17 @@ $(document).on("click", ".edit-btn", function() {
 // Xóa sản phẩm
 $(document).on("click", ".delete-btn", function() {
     let productId = $(this).data("id");
-    if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
+    if (confirm("Bạn có chắc chắn muốn xóa nhà sản xuất này?")) {
         $.ajax({
             url: `${API_URL}/${productId}`, // Gửi yêu cầu DELETE đến API
             method: "DELETE",
             success: function(response) {
-                alert("Xóa sản phẩm thành công!");
+                alert("Xóa nhà sản xuất thành công!");
                 loadProducts(); // Tải lại danh sách sản phẩm
             },
             error: function(xhr) {
-                console.error("Lỗi khi xóa sản phẩm:", xhr.responseText);
-                alert("Có lỗi xảy ra khi xóa sản phẩm!");
+                console.error("Lỗi khi xóa nhà sản xuất:", xhr.responseText);
+                alert("Có lỗi xảy ra khi xóa nhà sản xuất");
             }
         });
     }
