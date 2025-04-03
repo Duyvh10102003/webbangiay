@@ -45,22 +45,28 @@
             <div id="sidebar-scrollbar" style="margin-top: 60px;">
                 <hr />
                 <nav class="iq-sidebar-menu">
+                    
                     <ul id="iq-sidebar-toggle" class="iq-menu">
-                        <li><a id="manage" asp-area="Admin" asp-controller="Manager" asp-action="Index">
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/shoemanager/index.php">
+                               
                             <i class="fa-solid fa-shoe-prints"></i> 
                             Danh sách giày</a>
                         </li>
-                        <li><a id="manage" asp-area="Admin" asp-controller="CategoriesManager" asp-action="Index">
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/brands/brands.php">
                             <i class="fa-solid fa-industry"></i> 
                             Danh sách thương hiệu</a>
                         </li>
-                        <li><a id="manage" asp-area="Admin" asp-controller="AuthorsManager" asp-action="Index">
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/material/materials.php">
                             <i class="fa-solid fa-box"></i> 
                             Danh Sách Nguyên Liệu</a>
                         </li>
-                        <li><a id="manage" asp-area="Admin" asp-controller="BooksManager" asp-action="Index">
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/type/types.php">
                             <i class="fa-solid fa-tags"></i> 
                             Danh Sách Loại</a>
+                        </li>
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/manufacturer/manufacturer.php">
+                            <i class="fa-solid fa-tags"></i> 
+                            Danh Sách Nhà Sản Xuất</a>
                         </li>
                         <li><a id="manage" asp-area="Admin" asp-controller="User" asp-action="Index">
                                 <i class="fa-solid fa-user"></i>
