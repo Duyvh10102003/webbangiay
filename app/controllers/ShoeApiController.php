@@ -30,6 +30,19 @@ class ShoeApiController
         echo json_encode($shoes);
     }
 
+    // public function show($searchQuery)
+    // {
+    //     header('Content-Type: application/json');
+    //     $shoe = $this->shoeModel->searchShoes($searchQuery);
+
+    //     if ($shoe) {
+    //         echo json_encode($shoe);
+    //     } else {
+    //         http_response_code(404);
+    //         echo json_encode(['message' => 'Shoe not found']);
+    //     }
+    // }
+    
     // Lấy thông tin sản phẩm theo ID
     public function show($id)
     {
@@ -45,56 +58,93 @@ class ShoeApiController
     }
 
     // Thêm sản phẩm mới
-    public function store()
-    {
-        header('Content-Type: application/json');
-        $data = json_decode(file_get_contents("php://input"), true);
-        
-        $id = $data['id'];
-        $path_image = $data['path_image'] ?? '';
-        $title = $data['title'] ?? '';
-        $price = $data['price'] ?? '';
-        $type_id = $data['type_id'] ?? '';
-        $brand_id = $data['brand_id'] ?? '';
-        $manufacturer_id = $data['manufacturer_id'] ?? '';
-        $material_id = $data['material_id'] ?? '';
-        $description = $data['description'] ?? '';
-        
-        $result = $this->shoeModel->addShoe($id, $path_image, $title, $price, $type_id, $brand_id, $manufacturer_id, $material_id, $description);
-        
-        if (is_array($result)) {
-            http_response_code(400);
-            echo json_encode(['errors' => $result]);
+public function store()
+{
+    header('Content-Type: application/json');
+
+    // Kiểm tra xem có file ảnh được upload không
+    $path_image = '';
+    if (!empty($_FILES['path_image']['name'])) {
+        $upload_dir = __DIR__ . "/../../public/images/"; // Thư mục lưu ảnh
+        $file_name = time() . "_" . basename($_FILES['path_image']['name']); // Đổi tên file để tránh trùng lặp
+        $file_path = $upload_dir . $file_name;
+
+        // Kiểm tra và di chuyển file vào thư mục uploads
+        if (move_uploaded_file($_FILES['path_image']['tmp_name'], $file_path)) {
+            $path_image = "/webbangiay/public/images/" . $file_name; // Lưu đường dẫn ảnh để lưu vào database
         } else {
-            http_response_code(201);
-            echo json_encode(['message' => 'Shoe created successfully']);
+            http_response_code(400);
+            echo json_encode(['errors' => ['path_image' => 'Lỗi khi upload file']]);
+            return;
         }
     }
 
-    // Cập nhật sản phẩm theo ID
-    public function update($id)
-    {
-        header('Content-Type: application/json');
-        $data = json_decode(file_get_contents("php://input"), true);
-        
-        $path_image = $data['path_image'] ?? '';
-        $title = $data['title'] ?? '';
-        $price = $data['price'] ?? '';
-        $type_id = $data['type_id'] ?? '';
-        $brand_id = $data['brand_id'] ?? '';
-        $manufacturer_id = $data['manufacturer_id'] ?? '';
-        $material_id = $data['material_id'] ?? '';
-        $description = $data['description'] ?? '';
-        
-        $result = $this->shoeModel->updateShoe($id, $path_image, $title, $price, $type_id, $brand_id, $manufacturer_id, $material_id, $description);
-        
-        if ($result) {
-            echo json_encode(['message' => 'Shoe updated successfully']);
+    // Nhận dữ liệu từ `$_POST`
+    $id = uniqid(); // Tạo ID ngẫu nhiên
+    $title = $_POST['title'] ?? '';
+    $price = $_POST['price'] ?? '';
+    $type_id = $_POST['type_id'] ?? '';
+    $brand_id = $_POST['brand_id'] ?? '';
+    $manufacturer_id = $_POST['manufacturer_id'] ?? '';
+    $material_id = $_POST['material_id'] ?? '';
+    $description = $_POST['description'] ?? '';
+
+    // Gọi phương thức thêm giày vào database
+    $result = $this->shoeModel->addShoe($id, $path_image, $title, $price, $type_id, $brand_id, $manufacturer_id, $material_id, $description);
+
+    if (is_array($result)) {
+        http_response_code(400);
+        echo json_encode(['errors' => $result]);
+    } else {
+        http_response_code(201);
+        echo json_encode(['message' => 'Shoe created successfully']);
+    }
+}
+
+
+   // Cập nhật sản phẩm theo ID
+public function edit($id)
+{
+    header('Content-Type: application/json');
+
+    // Kiểm tra xem có file ảnh được upload không
+    $path_image = '';
+    if (!empty($_FILES['path_image']['name'])) {
+        $upload_dir = __DIR__ . "/../../public/images/"; // Thư mục lưu ảnh
+        $file_name = time() . "_" . basename($_FILES['path_image']['name']); // Đổi tên file để tránh trùng lặp
+        $file_path = $upload_dir . $file_name;
+
+        // Kiểm tra và di chuyển file vào thư mục uploads
+        if (move_uploaded_file($_FILES['path_image']['tmp_name'], $file_path)) {
+            $path_image = "/webbangiay/public/images/" . $file_name; // Lưu đường dẫn ảnh để lưu vào database
         } else {
             http_response_code(400);
-            echo json_encode(['message' => 'Shoe update failed']);
+            echo json_encode(['errors' => ['path_image' => 'Lỗi khi upload file']]);
+            return;
         }
     }
+
+    // Nhận dữ liệu từ `$_POST` cho các trường khác (nếu cần)
+    $title = $_POST['title'] ?? '';
+    $price = $_POST['price'] ?? '';
+    $type_id = $_POST['type_id'] ?? '';
+    $brand_id = $_POST['brand_id'] ?? '';
+    $manufacturer_id = $_POST['manufacturer_id'] ?? '';
+    $material_id = $_POST['material_id'] ?? '';
+    $description = $_POST['description'] ?? '';
+
+    // Gọi phương thức cập nhật giày vào database
+    $result = $this->shoeModel->updateShoe($id, $path_image, $title, $price, $type_id, $brand_id, $manufacturer_id, $material_id, $description);
+ 
+    if ($result) {
+        echo json_encode(['message' => 'Shoe updated successfully']);
+    } else {
+        http_response_code(400);
+        echo json_encode(['message' => 'Shoe update failed']);
+    }
+}
+
+
 
     // Xóa sản phẩm theo ID
     public function destroy($id)

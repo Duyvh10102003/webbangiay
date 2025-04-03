@@ -4,7 +4,6 @@ require_once 'app/models/ShoesModel.php';
 require_once 'app/controllers/ShoeApiController.php';
 require_once 'app/controllers/AuthApiController.php';
 // Start session
-
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
 $url = filter_var($url, FILTER_SANITIZE_URL);
@@ -18,20 +17,22 @@ $action = isset($url[1]) && $url[1] != '' ? $url[1] : 'index';
 if ($url[0] === 'api') {
     $method = $_SERVER['REQUEST_METHOD'];
 
-    if ($url[1] === 'register' || $url[1] === 'login') {
+    if ($url[1] === 'register' || $url[1] === 'login'|| $url[1] === 'logout') {
         $apiController = new AuthApiController();
 
         if ($url[1] === 'register' && $method === 'POST') {
             $apiController->register();
-        } elseif ($url[1] === 'login' && $method === 'POST') {
+        }elseif ($url[1] === 'login' && $method === 'POST') {
             $apiController->login();
+        }elseif ($url[1] === 'logout' && $method === 'POST') {
+                $apiController->logout();
         } else {
             http_response_code(405);
             echo json_encode(['message' => 'Method Not Allowed']);
         }
         exit;
     }
-
+    
     // Định tuyến API khác (ShoeApiController, UserApiController,...)
 $apiControllerName = ucfirst($url[1]) . 'ApiController';
 if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
@@ -46,22 +47,23 @@ if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
                 $action = 'search'; // Nếu có tham số search thì gọi action search
             } else {
                 $action = $id ? 'show' : 'index';
-            }
-            break;
-        case 'POST': 
-            $action = 'store';
-            break;
-        case 'PUT': 
-            $action = $id ? 'update' : null;
-            break;
-        case 'DELETE': 
-            $action = $id ? 'destroy' : null;
-            break;
-        default:
-            http_response_code(405);
-            echo json_encode(['message' => 'Method Not Allowed']);
-            exit;
-    }
+
+                break;
+            case 'POST': 
+                $action = $id ? 'edit' : 'store';
+                break;
+            case 'PUT': 
+                $action = $id ? 'update' : null;
+                break;
+            case 'DELETE': 
+                $action = $id ? 'destroy' : null;
+                break;
+            default:
+                http_response_code(405);
+                echo json_encode(['message' => 'Method Not Allowed']);
+                exit;
+        }
+
 
     // Gọi phương thức search và truyền tham số search vào
     if ($action && method_exists($controller, $action)) {

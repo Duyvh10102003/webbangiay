@@ -44,7 +44,13 @@
               </svg>
             </a>
           </li>
-
+          <li id="admin-icon" style="display: none;">
+            <a href="http://localhost/webbangiay/frontEnd/admin/views/shoemanager/index.php" class="rounded-circle bg-light p-2 mx-1">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <use xlink:href="#user"></use>
+              </svg>
+            </a>
+          </li>
           <!-- Form đăng nhập ẩn -->
           <div id="loginForm" class="login-container">
             <div class="login-box">
@@ -252,6 +258,7 @@
     }
   }
 
+  
   async function loginUser(event) {
     event.preventDefault(); // Ngăn chặn reload trang
 
@@ -259,48 +266,53 @@
     const password = document.getElementById("password").value;
 
     if (!email || !password) {
-      alert("Vui lòng nhập đầy đủ email và mật khẩu!");
-      return;
+        alert("Vui lòng nhập đầy đủ email và mật khẩu!");
+        return;
     }
 
     const loginData = {
-      email: email,
-      password: password
+        email: email,
+        password: password
     };
 
     try {
-      const response = await fetch("http://localhost/webbangiay/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(loginData)
-      });
+        const response = await fetch("http://localhost/webbangiay/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(loginData)
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (data.error) {
-        alert(data.error); // Hiển thị lỗi từ API
-      } else {
-        // alert("Đăng nhập thành công!");
-        localStorage.setItem("userToken", data.token); // Lưu token vào localStorage
-        localStorage.setItem("userInfo", JSON.stringify(data.user)); // Lưu thông tin user
+        if (data.error) {
+            alert(data.error); // Hiển thị lỗi từ API
+        } else {
+            // Lưu token và thông tin user vào localStorage
+            localStorage.setItem("userToken", data.token);
+            localStorage.setItem("userInfo", JSON.stringify(data.user));
 
-        updateUserUI();
-        // Chuyển hướng sau khi đăng nhập
-        window.location.href = "index.php";
-      }
+            updateUserUI(); // Cập nhật giao diện người dùng
+            window.location.reload();
+            // Kiểm tra vai trò của user và chuyển hướng phù hợp
+            
+        }
     } catch (error) {
-      console.error("Lỗi kết nối API:", error);
-      alert("Lỗi kết nối API, vui lòng thử lại!");
+        console.error("Lỗi kết nối API:", error);
+        alert("Lỗi kết nối API, vui lòng thử lại!");
     }
-  }
+}
+
+
 
   function updateUserUI() {
+
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const userMenu = document.getElementById("user-menu");
+    const adminIcon = document.getElementById("admin-icon");
     if (userInfo) {
-      const userMenu = document.getElementById("user-menu");
+      
       userMenu.innerHTML = `
       <span class="mx-2">${userInfo.username}</span>
       <a href="#" class="rounded-circle bg-light p-2 mx-1" onclick="logoutUser()">
@@ -309,7 +321,12 @@
         </svg>
       </a>
     `;
+      if (userInfo.role === "Admin") {
+        adminIcon.style.display = "block";
+      }
     }
+
+
   }
 
   // Gọi hàm này khi trang load để kiểm tra xem user đã đăng nhập chưa
@@ -323,17 +340,30 @@
 
 
   document.addEventListener("DOMContentLoaded", function() {
+
+    // Get user info from local storage
+    const userInfoString = localStorage.getItem('userInfo');
+      if (!userInfoString) {
+        alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");
+        return;
+      }
+
+    const userInfo = JSON.parse(userInfoString);
+    const userid = userInfo?.id;
+
+
     // Lấy giỏ hàng từ API khi trang tải xong
-    fetch('http://localhost/webbangiay/api/cart')
+    
+    fetch(`http://localhost/webbangiay/api/cart/${userid}`) 
       .then(response => response.json())
       .then(data => {
-        if (data.status === 'success') {
-          updateCartUI(data.cart);
-        } else {
-          console.error('Error fetching cart data');
-        }
-      })
-      .catch(error => console.error('Error:', error));
+      if (data.status === 'success') {
+        updateCartUI(data.cart); 
+      } else {
+        console.error('Error fetching cart data: ' + data.message);
+      }
+    })
+    .catch(error => console.error('Error:', error));
 
     // Cập nhật giỏ hàng trên giao diện người dùng
     function updateCartUI(cart) {
@@ -343,29 +373,27 @@
       cartList.innerHTML = ''; // Xóa danh sách hiện tại
 
       // Duyệt qua các sản phẩm trong giỏ hàng và thêm vào danh sách
-      Object.keys(cart).forEach(product_id => {
-        const product = cart[product_id];
-        const listItem = document.createElement('li');
-        listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-sm');
+        Object.keys(cart).forEach(product_id => {
+          const product = cart[product_id];
+          const listItem = document.createElement('li');
+          listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-sm');
 
-        const productName = `${product_id}`; // Có thể thay bằng tên sản phẩm thật
-        const productDescription = 'Brief description'; // Thêm mô tả sản phẩm
-        const productPrice = `${(product.quantity * product.price).toLocaleString('vi-VN')} VND`;
+          const productName = `${product_id}`; // Có thể thay bằng tên sản phẩm thật
+          const productPrice = `${(product.quantity * product.price).toLocaleString('vi-VN')} VND`;
 
-        listItem.innerHTML = `
+          listItem.innerHTML = `
                 <div>
                     <h6 class="my-0">${productName}</h6>
-                    <small class="text-body-secondary">${productDescription}</small>
                 </div>
                 <span class="text-body-secondary">${productPrice}</span>
             `;
 
-        // Thêm sản phẩm vào danh sách giỏ hàng
-        cartList.appendChild(listItem);
+          // Thêm sản phẩm vào danh sách giỏ hàng
+          cartList.appendChild(listItem);
 
-        // Cập nhật tổng tiền
-        total += product.quantity * product.price;
-      });
+          // Cập nhật tổng tiền
+          total += product.quantity * product.price;
+        });
 
       // Cập nhật số lượng giỏ hàng
       cartCount.textContent = Object.keys(cart).length;

@@ -32,7 +32,39 @@ class ShoesModel
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-
+    public function searchShoes($searchQuery)
+    {
+        $searchQuery = "%" . $searchQuery . "%";
+    
+        $query = "SELECT 
+                    p.id, 
+                    p.path_image, 
+                    p.title, 
+                    p.price, 
+                    t.name AS type, 
+                    b.name AS brand, 
+                    m.name AS manufacturer, 
+                    mat.name AS material, 
+                    p.description
+                  FROM {$this->table_name} p
+                  LEFT JOIN types t ON p.type_id = t.id
+                  LEFT JOIN brands b ON p.brand_id = b.id
+                  LEFT JOIN manufacturers m ON p.manufacturer_id = m.id
+                  LEFT JOIN materials mat ON p.material_id = mat.id
+                  WHERE p.id LIKE :searchQuery 
+                  OR p.title LIKE :searchQuery
+                  OR p.description LIKE :searchQuery
+                  OR t.name LIKE :searchQuery 
+                  OR b.name LIKE :searchQuery 
+                  OR mat.name LIKE :searchQuery";
+    
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':searchQuery', $searchQuery, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);  
+    }
+    
+    
     public function getShoeById($id)
     {
         $query = "SELECT 
@@ -147,7 +179,7 @@ class ShoesModel
 
     public function updateShoe($id, $path_image, $title, $price, $type_id, $brand_id, $manufacturer_id, $material_id, $description)
     {
-        $query = "UPDATE {$this->table_name} 
+        $query = "UPDATE " .$this->table_name ." 
                   SET path_image = :path_image, title = :title, price = :price, type_id = :type_id,  brand_id = :brand_id, manufacturer_id = :manufacturer_id, material_id = :material_id,  description = :description
                   WHERE id = :id";
 
@@ -174,11 +206,14 @@ class ShoesModel
 
     public function deleteShoe($id)
     {
-        $query = "DELETE FROM {$this->table_name} WHERE id = :id";
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id);
 
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
     }
 }

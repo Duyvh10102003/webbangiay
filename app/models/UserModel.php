@@ -12,7 +12,7 @@ class UserModel
     }
 
     // 🟢 Đăng ký User + Gán Role
-    public function register($username, $email, $password, $role)
+    public function register($username, $email, $password, $role = "User")
     {
         // Kiểm tra dữ liệu đầu vào
         if (empty($username) || empty($email) || empty($password)) {
@@ -97,7 +97,7 @@ class UserModel
         $stmt->bindParam(":email", $email);
         $stmt->execute();
 
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user["PasswordHash"])) {
             return [
@@ -108,5 +108,88 @@ class UserModel
             ];
         }
         return false;
+    }
+
+    // 🟢 Cập nhật thông tin người dùng
+    public function updateuser($userid, $username, $email)
+    {
+        if (empty($userid)) {
+        return ["error" => "ID người dùng không hợp lệ"];
+        }
+
+        // Chuẩn hóa dữ liệu
+        $normalizedUsername = strtoupper(trim($username));
+        $normalizedEmail = strtoupper(trim($email));
+
+        // Cập nhật thông tin user
+        $query = "UPDATE $this->table_users 
+              SET UserName = :username, NormalizedUserName = :normalizedUsername, 
+                  Email = :email, NormalizedEmail = :normalizedEmail 
+              WHERE Id = :id";
+
+        try {
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $userid);
+        $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":normalizedUsername", $normalizedUsername);
+        $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":normalizedEmail", $normalizedEmail);
+
+        if ($stmt->execute()) {
+            return ["message" => "Cập nhật thành công"];
+        } else {
+            return ["error" => "Cập nhật thất bại"];
+        }
+        } catch (PDOException $e) {
+            return ["error" => "Lỗi SQL: " . $e->getMessage()];
+        }
+    }
+
+    // 🟢 Xóa user
+    public function deleteuser ($userid)
+    {
+        // Kiểm tra dữ liệu đầu vào
+        if (empty($userid)) {
+            return ["error" => "Vui lòng nhập đầy đủ thông tin"];
+        }
+
+        // Xóa user
+        $query = "DELETE FROM $this->table_users WHERE Id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $userid);
+
+        if ($stmt->execute()) {
+            return ["message" => "Xóa thành công"];
+        } else {
+            return ["error" => "Xóa thất bại"];
+        }
+    }
+    // 🟢 Lấy danh sách user
+    public function getAllUsers()
+    {
+        $query = "SELECT u.Id, u.UserName, u.Email, r.Name as Role 
+                  FROM $this->table_users u
+                  LEFT JOIN $this->table_user_roles ur ON u.Id = ur.UserId
+                  LEFT JOIN $this->table_roles r ON ur.RoleId = r.Id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    // 🟢 Lấy thông tin user theo ID
+    public function getUserById($userid)
+    {
+        $query = "SELECT u.Id, u.UserName, u.Email, r.Name as Role 
+                  FROM $this->table_users u
+                  LEFT JOIN $this->table_user_roles ur ON u.Id = ur.UserId
+                  LEFT JOIN $this->table_roles r ON ur.RoleId = r.Id
+                  WHERE u.Id = :id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $userid);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

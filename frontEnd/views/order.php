@@ -90,39 +90,47 @@ $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
         document.addEventListener("DOMContentLoaded", function() {
             
             // Lấy user_id từ localStorage
-            const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-            const user_id = userInfo.id;
-            document.getElementById("user_Id").value = user_id;
-            console.log("User ID từ localStorage:", localStorage.getItem("userInfo"));
-            // Lấy giỏ hàng từ localStorage
-            const cartObject = JSON.parse(localStorage.getItem("cart")) || {};
-            const orderDetails = document.getElementById("order-details");
-            const totalPriceElement = document.getElementById("total-price");
-            let total = 0;
+const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+const user_id = userInfo.id;
+document.getElementById("user_Id").value = user_id;
+console.log("User ID từ localStorage:", localStorage.getItem("userInfo"));
 
-            // Chuyển đổi object -> array
-            const cartArray = Object.keys(cartObject).map(product_id => ({
-                product_id: product_id,
-                quantity: parseInt(cartObject[product_id].quantity, 10),
-                price: parseInt(cartObject[product_id].price, 10)
-            }));
+// Lấy giỏ hàng từ localStorage
+const cartObject = JSON.parse(localStorage.getItem("cart")) || {};
+const orderDetails = document.getElementById("order-details");
+const totalPriceElement = document.getElementById("total-price");
+let total = 0;
 
-            console.log("Giỏ hàng sau khi chuyển đổi:", cartArray);
+// Chuyển đổi object -> array và lọc theo user_id
+const cartArray = Object.keys(cartObject)
+    .filter(cartUserId => cartUserId === user_id)  // Lọc theo user_id
+    .map(cartUserId => {
+        return Object.keys(cartObject[cartUserId]).map(product_id => ({
+            user_id: cartUserId,
+            product_id: product_id,
+            quantity: parseInt(cartObject[cartUserId][product_id].quantity, 10),
+            price: parseInt(cartObject[cartUserId][product_id].price, 10)
+        }));
+    }).flat();
 
-            // Hiển thị giỏ hàng trong bảng HTML
-            cartArray.forEach(product => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-            <td>${product.product_id}</td>
-            <td>${product.quantity}</td>
-            <td>${product.price.toLocaleString('vi-VN')} VND</td>
-            <td>${(product.quantity * product.price).toLocaleString('vi-VN')} VND</td>
-        `;
-                orderDetails.appendChild(row);
-                total += product.quantity * product.price;
-            });
+console.log("Giỏ hàng sau khi chuyển đổi:", cartArray);
 
-            totalPriceElement.textContent = total.toLocaleString('vi-VN');
+// Hiển thị giỏ hàng trong bảng HTML
+cartArray.forEach(product => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${product.product_id}</td>
+        <td>${product.quantity}</td>
+        <td>${product.price.toLocaleString('vi-VN')} VND</td>
+        <td>${(product.quantity * product.price).toLocaleString('vi-VN')} VND</td>
+    `;
+    orderDetails.appendChild(row);
+    total += product.quantity * product.price;
+});
+
+// Hiển thị tổng giá trong phần tử tổng giá
+totalPriceElement.textContent = total.toLocaleString('vi-VN');
+
 
             // Xử lý khi nhấn nút "Confirm Order"
             document.getElementById("order-form").addEventListener("submit", function(event) {
