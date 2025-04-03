@@ -23,7 +23,7 @@
             <!-- Nút hành động -->
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-success btn-lg">Thêm</button>
-                <a href="index.php" class="btn btn-secondary btn-lg ml-3">Quay về danh sách</a>
+                <a href="manufacturer.php" class="btn btn-secondary btn-lg ml-3">Quay về danh sách</a>
             </div>
         </form>
     </div>
@@ -38,7 +38,7 @@
 
             let brandName = $("#name").val().trim();
             if (!brandName) {
-                alert("Tên brand không được để trống.");
+                alert("Tên nhà sản xuất  không được để trống.");
                 return;
             }
 
@@ -50,12 +50,12 @@
                 contentType: "application/json", // Định dạng JSON
                 data: JSON.stringify(requestData), // Chuyển dữ liệu thành JSON
                 success: function(response) {
-                    alert("Thêm Brand thành công!");
+                    alert("Thêm nhà sản xuất  thành công!");
                     window.location.href = "http://localhost/webbangiay/frontEnd/admin/views/manufacturer/manufacturer.php";  
                 },
                 error: function(xhr) {
-                    console.error("Lỗi khi thêm Brand:", xhr.responseText);
-                    alert("Có lỗi xảy ra khi thêm Brand!");
+                    console.error("Lỗi khi thêm nhà sản xuất :", xhr.responseText);
+                    alert("Có lỗi xảy ra khi thêm nhà sản xuất !");
                 }
             });
         });
