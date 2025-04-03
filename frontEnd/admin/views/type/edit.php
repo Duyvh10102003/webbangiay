@@ -17,7 +17,7 @@
             <!-- Nút hành động -->
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary btn-lg">Lưu Thay Đổi</button>
-                <a href="brands.php" class="btn btn-secondary btn-lg ml-3">Quay về danh sách</a>
+                <a href="types.php" class="btn btn-secondary btn-lg ml-3">Quay về danh sách</a>
             </div>
         </form>
     </div>
