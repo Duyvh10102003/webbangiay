@@ -16,7 +16,7 @@
         <div class="col-11 col-md-11">
             <form id="header-search-form" action="search.php" method="get">
                 <input type="text" name="search" id="header-search-input" class="form-control border-0 bg-transparent"
-                    placeholder="Search for more than 20,000 products">
+                    placeholder="Search for more than 20,000 products" autocomplete="off">
             </form>
         </div>
         <div class="col-1">
