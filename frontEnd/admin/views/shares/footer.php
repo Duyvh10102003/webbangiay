@@ -35,7 +35,18 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
    
+<script>
+      
+document.addEventListener("DOMContentLoaded", function () {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
+    // Nếu không có user hoặc user không phải admin => Chuyển hướng 404
+    if (!userInfo || userInfo.role !== "Admin") {
+        window.location.href = "404.php"; // Chuyển hướng sang trang 404
+    }
+});
+
+</script>
 
 
     <script src="../../assets/js/jquery.min.js"></script>
