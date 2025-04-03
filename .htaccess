@@ -12,3 +12,4 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 # Thì chuyển hướng tất cả các request về file index.php và truyền tham số URL
 RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
+

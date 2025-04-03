@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>TRANG QUẢN TRỊ TVQ BOOKS</title>
+    <title>TRANG QUẢN TRỊ SPARK</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/dataTables.bootstrap4.min.css">
@@ -29,7 +30,7 @@
                 <a id="manage" asp-area="Admin" asp-controller="Manager" asp-action="Index" class="header-logo">
                     <img src="../../assets/images/logo.png" class="img-fluid rounded-normal" alt="">
                     <div class="logo-title">
-                        <span class="text-primary text-uppercase">TVQ BOOKS</span>
+                        <span class="text-primary text-uppercase">SPARK</span>
                     </div>
                 </a>
                 <div class="iq-menu-bt-sidebar">
@@ -62,12 +63,12 @@
                             Danh Sách Loại</a>
                         </li>
                         <li><a id="manage" asp-area="Admin" asp-controller="User" asp-action="Index">
-                            <i class="fa-solid fa-user"></i> 
-                            Tài khoản</a>
+                                <i class="fa-solid fa-user"></i>
+                                Tài khoản</a>
                         </li>
                         <li><a id="manage" asp-area="Admin" asp-controller="OrderManagement" asp-action="ManageOrders">
-                            <i class="fa-solid fa-box"></i>
-                            Đơn hàng</a>
+                                <i class="fa-solid fa-box"></i>
+                                Đơn hàng</a>
                         </li>
                     </ul>
                 </nav>
@@ -75,9 +76,10 @@
                     <div class="iq-card">
                         <div class="iq-card-body">
                             <div class="sidebar-bottom-content">
-                                <a class="btn w-100 btn-primary mt-4 view-more" asp-area="" asp-controller="Home" asp-action="Index">
+                                <a class="btn w-100 btn-primary mt-4 view-more" href="http://localhost/webbangiay/frontEnd/views/index.php">
                                     <i class="fa-solid fa-home"></i>
-                                    Trang chủ</a>
+                                    Trang chủ
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -98,7 +100,7 @@
                             <a href="index.html" class="header-logo">
                                 <img src="../../assets/images/logo.png" class="img-fluid rounded-normal" alt="">
                                 <div class="logo-title">
-                                    <span class="text-primary text-uppercase">TVQ BOOKS</span>
+                                    <span class="text-primary text-uppercase">SPARK</span>
                                 </div>
                             </a>
                         </div>
@@ -111,13 +113,8 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ml-auto navbar-list">
-                            <li >
-                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                    <button type="submit" class="nav-link btn btn-link text-dark">
-                                        <i class="fa-solid fa-right-from-bracket" style="font-size: 20px;"></i>
-                                        <span style="font-size: 20px;"><strong>Đăng xuất</strong></span>
-                                    </button>
-                                </form>
+                            <li>
+                                
                             </li>
                         </ul>
                     </div>
