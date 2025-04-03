@@ -24,6 +24,7 @@ if ($url[0] === 'api') {
             $apiController->register();
         }elseif ($url[1] === 'login' && $method === 'POST') {
             $apiController->login();
+        
         } else {
             http_response_code(405);
             echo json_encode(['message' => 'Method Not Allowed']);
@@ -39,13 +40,9 @@ if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
     $id = $url[2] ?? null;
     $search = $_GET['search'] ?? null; // Lấy tham số search nếu có
 
-    switch ($method) {
-        case 'GET': 
-            if ($search) {
-                $action = 'search'; // Nếu có tham số search thì gọi action search
-            } else {
+        switch ($method) {
+            case 'GET': 
                 $action = $id ? 'show' : 'index';
-
                 break;
             case 'POST': 
                 $action = $id ? 'edit' : 'store';
@@ -62,23 +59,16 @@ if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
                 exit;
         }
 
-
-    // Gọi phương thức search và truyền tham số search vào
-    if ($action && method_exists($controller, $action)) {
-        if ($action === 'search') {
-            // Truyền tham số search vào phương thức search
-            call_user_func_array([$controller, $action], [$search]);
-        } else {
+        if ($action && method_exists($controller, $action)) {
             call_user_func_array([$controller, $action], $id ? [$id] : []);
+        } else {
+            http_response_code(404);
+            echo json_encode(['message' => 'Action not found']);
         }
+        exit;
     } else {
         http_response_code(404);
-        echo json_encode(['message' => 'Action not found']);
+        echo json_encode(['message' => 'Controller not found']);
+        exit;
     }
-    exit;
-} else {
-    http_response_code(404);
-    echo json_encode(['message' => 'Controller not found']);
-    exit;
-}
 }

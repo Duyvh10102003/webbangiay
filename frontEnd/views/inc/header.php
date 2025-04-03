@@ -12,25 +12,21 @@
       </div>
 
       <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
-    <div class="search-bar row bg-light p-2 my-2 rounded-4">
-        <div class="col-11 col-md-11">
-            <form id="header-search-form" action="search.php" method="get">
-                <input type="text" name="search" id="header-search-input" class="form-control border-0 bg-transparent"
-                    placeholder="Search for more than 20,000 products" autocomplete="off">
+        <div class="search-bar row bg-light p-2 my-2 rounded-4">
+
+          <div class="col-11 col-md-11">
+            <form id="search-form" class="text-center" action="index.php" method="post">
+              <input type="text" class="form-control border-0 bg-transparent"
+                placeholder="Search for more than 20,000 products">
             </form>
+          </div>
+          <div class="col-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
+            </svg>
+          </div>
         </div>
-        <div class="col-1">
-            <button type="submit" form="header-search-form" style="background:none;border:none;cursor:pointer;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z"/>
-                </svg>
-            </button>
-        </div>
-    </div>
-</div>
-<!-- Kết quả tìm kiếm -->
-<div class="search-results"></div>
       </div>
 
       <div
