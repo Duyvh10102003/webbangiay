@@ -30,18 +30,18 @@ class ShoeApiController
         echo json_encode($shoes);
     }
 
-    // public function show($searchQuery)
-    // {
-    //     header('Content-Type: application/json');
-    //     $shoe = $this->shoeModel->searchShoes($searchQuery);
+    public function search($searchQuery)
+    {
+        header('Content-Type: application/json');
+        $shoe = $this->shoeModel->searchShoes($searchQuery);
 
-    //     if ($shoe) {
-    //         echo json_encode($shoe);
-    //     } else {
-    //         http_response_code(404);
-    //         echo json_encode(['message' => 'Shoe not found']);
-    //     }
-    // }
+        if ($shoe) {
+            echo json_encode($shoe);
+        } else {
+            http_response_code(404);
+            echo json_encode(['message' => 'Shoe not found']);
+        }
+    }
     
     // Lấy thông tin sản phẩm theo ID
     public function show($id)
