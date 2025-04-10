@@ -36,6 +36,8 @@ Clone dự án về máy tính của bạn bằng cách sử dụng lệnh:
 ```bash
 git clone https://github.com/Duyvh10102003/webbangiay.git
 
+```
+
 ### Bước 2: Cài Đặt Máy Chủ Web
 
 Chạy máy chủ web như XAMPP, WAMP hoặc MAMP để chạy dự án PHP của bạn.
