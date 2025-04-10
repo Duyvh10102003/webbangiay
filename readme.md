@@ -35,3 +35,24 @@ Clone dự án về máy tính của bạn bằng cách sử dụng lệnh:
 
 ```bash
 git clone https://github.com/Duyvh10102003/webbangiay.git
+
+### Bước 2: Cài Đặt Máy Chủ Web
+
+Chạy máy chủ web như XAMPP, WAMP hoặc MAMP để chạy dự án PHP của bạn.
+
+### Bước 3: Cấu Hình Cơ Sở Dữ Liệu
+
+Tạo một cơ sở dữ liệu MySQL mới với tên shopshoe.
+
+Import file shopshoe.sql vào cơ sở dữ liệu của bạn để tạo bảng sản phẩm và người dùng.
+
+### Bước 4: Cấu Hình Tệp Kết Nối Cơ Sở Dữ Liệu
+
+Mở tệp config.php trong thư mục app và nhập thông tin kết nối cơ sở dữ liệu của bạn:
+
+### Bước 5: Chạy Dự Án
+
+Mở trình duyệt của bạn và truy cập http://localhost/webbangiay để xem trang web bán giày của bạn.
+
+
+
