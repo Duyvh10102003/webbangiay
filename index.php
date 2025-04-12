@@ -24,6 +24,7 @@ if ($url[0] === 'api') {
             $apiController->register();
         }elseif ($url[1] === 'login' && $method === 'POST') {
             $apiController->login();
+        
         } else {
             http_response_code(405);
             echo json_encode(['message' => 'Method Not Allowed']);
@@ -32,11 +33,12 @@ if ($url[0] === 'api') {
     }
     
     // Định tuyến API khác (ShoeApiController, UserApiController,...)
-    $apiControllerName = ucfirst($url[1]) . 'ApiController';
-    if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
-        require_once 'app/controllers/' . $apiControllerName . '.php';
-        $controller = new $apiControllerName();
-        $id = $url[2] ?? null;
+$apiControllerName = ucfirst($url[1]) . 'ApiController';
+if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
+    require_once 'app/controllers/' . $apiControllerName . '.php';
+    $controller = new $apiControllerName();
+    $id = $url[2] ?? null;
+    $search = $_GET['search'] ?? null; // Lấy tham số search nếu có
 
         switch ($method) {
             case 'GET': 

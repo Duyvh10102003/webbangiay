@@ -76,21 +76,31 @@ class AuthApiController
             echo json_encode(["error" => "Người dùng không tồn tại"]);
         }
     }
-    // Cập nhật thông tin người dùng
-    public function update($userId)
-    {
-        header("Content-Type: application/json");
-        $data = json_decode(file_get_contents("php://input"), true);
 
-        if (empty($userId) || empty($data)) {
-            return;
-        }
+// Trong class AuthApiController
+public function update($userId)
+{
+    header("Content-Type: application/json");
+    $data = json_decode(file_get_contents("php://input"), true);
 
-        $result = $this->userModel->updateuser($userId, $data['username'] ?? null, $data['email'] ?? null);
 
-        echo json_encode($result);
+    if (empty($userId) || empty($data)) {
+        echo json_encode(["error" => "Dữ liệu không hợp lệ"]);
+        return;
     }
+
+
+    $result = $this->userModel->updateuser(
+        $userId,
+        $data['username'] ?? null,
+        $data['email'] ?? null,
+        $data['role'] ?? null
+    );
+
+    echo json_encode($result);
+}
     // Xóa người dùng
+
     public function destroy($userId)
     {
         header("Content-Type: application/json");

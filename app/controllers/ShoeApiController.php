@@ -107,8 +107,16 @@ public function edit($id)
 {
     header('Content-Type: application/json');
 
-    // Kiểm tra xem có file ảnh được upload không
-    $path_image = '';
+    // Lấy dữ liệu sản phẩm hiện tại từ DB
+    $currentShoe = $this->shoeModel->getShoeById($id);
+    if (!$currentShoe) {
+        http_response_code(404);
+        echo json_encode(['message' => 'Shoe not found']);
+        return;
+    }
+
+    // Giữ nguyên ảnh cũ nếu không upload ảnh mới
+    $path_image = $currentShoe->path_image; // Truy cập thuộc tính object đúng cách
     if (!empty($_FILES['path_image']['name'])) {
         $upload_dir = __DIR__ . "/../../public/images/"; // Thư mục lưu ảnh
         $file_name = time() . "_" . basename($_FILES['path_image']['name']); // Đổi tên file để tránh trùng lặp
@@ -159,7 +167,32 @@ public function edit($id)
             echo json_encode(['message' => 'Shoe deletion failed']);
         }
     }
-
+    // Tìm kiếm giày theo tên
+    public function search($name)
+    {
+        header('Content-Type: application/json');
+    
+        // Kiểm tra nếu tên tìm kiếm rỗng
+        if (empty($name)) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Search keyword is required']);
+            return;
+        }
+    
+        try {
+            $shoes = $this->shoeModel->search($name);
+    
+                if (!empty($shoes)) {
+                echo json_encode($shoes);
+            } else {
+                http_response_code(404);
+                echo json_encode(['message' => 'No shoes found']);
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['message' => 'Internal Server Error', 'error' => $e->getMessage()]);
+        }
+    }
     //upload ảnh 
     // private function uploadImage($file)
     // {
