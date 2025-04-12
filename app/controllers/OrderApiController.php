@@ -59,4 +59,19 @@ class OrderApiController
 
         echo json_encode($result);
     }
+
+    // POST: /order/pay
+    public function payOrder() {
+        // Lấy JSON từ request body
+        $data = json_decode(file_get_contents("php://input"), true);
+        $orderId = $data['order_id'] ?? null;
+
+        if (!$orderId) {
+            echo json_encode(['success' => false, 'message' => 'Order ID is required']);
+            return;
+        }
+
+        $success = $this->orderModel->payOrder($orderId);
+        echo json_encode(['success' => $success]);
+    }
 }

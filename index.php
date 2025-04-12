@@ -49,6 +49,11 @@ if ($url[0] === 'api') {
             $controller->search($query);
             exit;
         }
+        if ($actionParam === 'payOrder' && $method === 'POST') {
+            $controller = new OrderApiController();
+            $controller->payOrder();
+            exit;
+        }
 
         switch ($method) {
             case 'GET':

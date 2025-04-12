@@ -75,4 +75,10 @@ class OrderModel
         // Lấy danh sách sản phẩm trong đơn hàng dưới dạng mảng
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function payOrder($orderId) {
+        $sql = "UPDATE orders SET status = 'completed' WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$orderId]);
+    }
 }
