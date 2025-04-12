@@ -48,25 +48,20 @@
                     
                     <ul id="iq-sidebar-toggle" class="iq-menu">
                         <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/shoemanager/index.php">
-                               
-                            <i class="fa-solid fa-shoe-prints"></i> 
-                            Danh sách giày</a>
+                                <i class="fa-solid fa-th-large"></i>
+                                Danh sách giày</a>
                         </li>
                         <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/brands/brands.php">
-                            <i class="fa-solid fa-industry"></i> 
-                            Danh sách thương hiệu</a>
+                                <i class="fa-solid fa-th-large"></i>
+                                Danh sách thương hiệu</a>
                         </li>
                         <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/material/materials.php">
-                            <i class="fa-solid fa-box"></i> 
-                            Danh Sách Nguyên Liệu</a>
+                                <i class="fa-solid fa-th-large"></i>
+                                Danh sách nguyên liệu</a>
                         </li>
                         <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/type/types.php">
-                            <i class="fa-solid fa-tags"></i> 
-                            Danh Sách Loại</a>
-                        </li>
-                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/manufacturer/manufacturer.php">
-                            <i class="fa-solid fa-tags"></i> 
-                            Danh Sách Nhà Sản Xuất</a>
+                                <i class="fa-solid fa-th-large"></i>
+                                Danh sách loại</a>
                         </li>
                         <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/user/index.php">
                         <i class="fa-solid fa-tags"></i> 

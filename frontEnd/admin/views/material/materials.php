@@ -45,9 +45,8 @@
 
                
     <script>
-  const API_URL = "http://localhost/webbangiay/api/material"; // Địa chỉ API để lấy danh sách sản phẩm
+  const API_URL = "http://localhost/webbangiay/api/material"; 
 
-// Load danh sách sản phẩm
 function loadProducts() {
   $.ajax({
     url: API_URL,
@@ -77,15 +76,13 @@ function loadProducts() {
 }
 
 
-
-// Load sản phẩm khi trang được tải
 $(document).ready(function() {
   loadProducts();
 });
 //
 $(document).on("click", ".edit-btn", function() {
-    let productId = $(this).data("id");  // Lấy ID giày cần chỉnh sửa
-    window.location.href = `edit.php?id=${productId}`;  // Chuyển hướng đến trang edit.php
+    let productId = $(this).data("id");  
+    window.location.href = `edit.php?id=${productId}`;  
 });
 
 // Xóa sản phẩm
@@ -93,11 +90,11 @@ $(document).on("click", ".delete-btn", function() {
     let productId = $(this).data("id");
     if (confirm("Bạn có chắc chắn muốn xóa?")) {
         $.ajax({
-            url: `${API_URL}/${productId}`, // Gửi yêu cầu DELETE đến API
+            url: `${API_URL}/${productId}`, 
             method: "DELETE",
             success: function(response) {
                 alert("Xóa thành công!");
-                loadProducts(); // Tải lại danh sách sản phẩm
+                loadProducts(); 
             },
             error: function(xhr) {
                 console.error("Lỗi khi :", xhr.responseText);
