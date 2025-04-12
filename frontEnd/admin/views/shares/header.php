@@ -63,13 +63,9 @@
                                 <i class="fa-solid fa-th-large"></i>
                                 Danh sách loại</a>
                         </li>
-                        <li><a id="manage" asp-area="Admin" asp-controller="User" asp-action="Index">
-                                <i class="fa-solid fa-user"></i>
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/user/index.php">
+                        <i class="fa-solid fa-tags"></i> 
                                 Tài khoản</a>
-                        </li>
-                        <li><a id="manage" asp-area="Admin" asp-controller="OrderManagement" asp-action="ManageOrders">
-                                <i class="fa-solid fa-box"></i>
-                                Đơn hàng</a>
                         </li>
                     </ul>
                 </nav>

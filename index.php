@@ -24,6 +24,7 @@ if ($url[0] === 'api') {
             $apiController->register();
         }elseif ($url[1] === 'login' && $method === 'POST') {
             $apiController->login();
+        
         } else {
             http_response_code(405);
             echo json_encode(['message' => 'Method Not Allowed']);
@@ -46,6 +47,11 @@ if ($url[0] === 'api') {
         if ($method === 'GET' && $actionParam === 'search') {
             $query = $_GET['q'] ?? '';
             $controller->search($query);
+            exit;
+        }
+        if ($actionParam === 'payOrder' && $method === 'POST') {
+            $controller = new OrderApiController();
+            $controller->payOrder();
             exit;
         }
 

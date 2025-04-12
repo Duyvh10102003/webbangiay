@@ -11,7 +11,7 @@ class UserModel
         $this->conn = $db;
     }
 
-    // 🟢 Đăng ký User + Gán Role
+    // Đăng ký User + Gán Role
     public function register($username, $email, $password, $role = "User")
     {
         // Kiểm tra dữ liệu đầu vào
@@ -84,7 +84,7 @@ class UserModel
         }
     }
 
-    // 🟢 Đăng nhập
+    // Đăng nhập
     public function login($email, $password)
     {
         $query = "SELECT u.Id, u.UserName, u.Email, u.PasswordHash, r.Name as Role 
@@ -190,7 +190,7 @@ public function updateuser($userid, $username, $email, $role = null)
     }
 }
 
-    // 🟢 Xóa user
+    // Xóa user
     public function deleteuser ($userid)
     {
         if (empty($userid)) {
@@ -207,7 +207,7 @@ public function updateuser($userid, $username, $email, $role = null)
             return ["error" => "Xóa thất bại"];
         }
     }
-    // 🟢 Lấy danh sách user
+    // Lấy danh sách user
     public function getAllUsers()
     {
         $query = "SELECT u.Id, u.UserName, u.Email, r.Name as Role 
@@ -220,7 +220,7 @@ public function updateuser($userid, $username, $email, $role = null)
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    // 🟢 Lấy thông tin user theo ID
+    // Lấy thông tin user theo ID
     public function getUserById($userid)
     {
         $query = "SELECT u.Id, u.UserName, u.Email, r.Name as Role 
