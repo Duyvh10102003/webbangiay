@@ -32,45 +32,53 @@ if ($url[0] === 'api') {
     }
     
     // Định tuyến API khác (ShoeApiController, UserApiController,...)
-$apiControllerName = ucfirst($url[1]) . 'ApiController';
-if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
-    require_once 'app/controllers/' . $apiControllerName . '.php';
-    $controller = new $apiControllerName();
-    $id = $url[2] ?? null;
-    $search = $_GET['search'] ?? null; // Lấy tham số search nếu có
+    $apiControllerName = ucfirst($url[1]) . 'ApiController';
+    $controllerPath = 'app/controllers/' . $apiControllerName . '.php';
 
-    switch ($method) {
-        case 'GET': 
-            if ($search) {
-                $action = 'search'; // Nếu có tham số search thì gọi action search
-            } else {
-                $action = $id ? 'show' : 'index';
+    if (file_exists($controllerPath)) {
+        require_once $controllerPath;
+        $controller = new $apiControllerName();
 
+        $resource = $url[1]; // e.g., "shoes"
+        $actionParam = $url[2] ?? null;
+
+        // Handle search via query param
+        if ($method === 'GET' && $actionParam === 'search') {
+            $query = $_GET['q'] ?? '';
+            $controller->search($query);
+            exit;
+        }
+
+        switch ($method) {
+            case 'GET':
+                if (!$actionParam) {
+                    $controller->index(); // /api/shoes
+                } else {
+                    $controller->show($actionParam); // /api/shoes/{id}
+                }
                 break;
-            case 'POST': 
-                $action = $id ? 'edit' : 'store';
+
+            case 'POST':
+                if (!$actionParam) {
+                    $controller->store(); // /api/shoes
+                } else {
+                    $controller->edit($actionParam); // /api/shoes/{id}
+                }
                 break;
-            case 'PUT': 
-                $action = $id ? 'update' : null;
+
+            case 'DELETE':
+                if ($actionParam) {
+                    $controller->destroy($actionParam); // /api/shoes/{id}
+                } else {
+                    methodNotAllowed();
+                }
                 break;
-            case 'DELETE': 
-                $action = $id ? 'destroy' : null;
-                break;
+
             default:
-                http_response_code(405);
-                echo json_encode(['message' => 'Method Not Allowed']);
-                exit;
+                methodNotAllowed();
         }
+        exit;
 
-
-    // Gọi phương thức search và truyền tham số search vào
-    if ($action && method_exists($controller, $action)) {
-        if ($action === 'search') {
-            // Truyền tham số search vào phương thức search
-            call_user_func_array([$controller, $action], [$search]);
-        } else {
-            call_user_func_array([$controller, $action], $id ? [$id] : []);
-        }
     } else {
         http_response_code(404);
         echo json_encode(['message' => 'Action not found']);
@@ -81,4 +89,10 @@ if (file_exists('app/controllers/' . $apiControllerName . '.php')) {
     echo json_encode(['message' => 'Controller not found']);
     exit;
 }
+}
+
+// Helper for Method Not Allowed
+function methodNotAllowed() {
+    http_response_code(405);
+    echo json_encode(['message' => 'Method Not Allowed']);
 }

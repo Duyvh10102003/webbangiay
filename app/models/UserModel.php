@@ -193,12 +193,10 @@ public function updateuser($userid, $username, $email, $role = null)
     // 🟢 Xóa user
     public function deleteuser ($userid)
     {
-        // Kiểm tra dữ liệu đầu vào
         if (empty($userid)) {
             return ["error" => "Vui lòng nhập đầy đủ thông tin"];
         }
 
-        // Xóa user
         $query = "DELETE FROM $this->table_users WHERE Id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $userid);
@@ -235,6 +233,6 @@ public function updateuser($userid, $username, $email, $role = null)
         $stmt->bindParam(":id", $userid);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 }
