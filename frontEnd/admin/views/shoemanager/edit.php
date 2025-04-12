@@ -1,6 +1,6 @@
 <?php include __DIR__ . '/../shares/header.php'; ?>
 
-<h1 class="text-center mb-4">Thêm Giày Mới</h1>
+<h1 class="text-center mb-4">Chỉnh sửa giày</h1>
 
 <hr />
 
@@ -64,13 +64,21 @@
                         <label for="path_image" class="control-label">Hình ảnh giày</label>
                         <input type="file" id="path_image" name="path_image" class="form-control" />
                         <span id="image-validation" class="text-danger"></span>
+                       
                     </div>
+                    <div class="form-group mb-3">
+                        <label   label for="image-preview" class="control-label">Hình ảnh giày hiện tại</label>
+                        <!-- Thêm thẻ img để hiển thị ảnh -->
+                        <img id="image-preview" src="" alt="Hình ảnh giày" style="max-width: 200px; display: none;" />
+
+                    </div>
+                    
                 </div>
             </div>
 
             <!-- Nút hành động -->
             <div class="text-center mt-4">
-                <input type="submit" value="Thêm" class="btn btn-success btn-lg" />
+                <input type="submit" value="Chỉnh sửa" class="btn btn-success btn-lg" />
                 <a href="index.php" class="btn btn-secondary btn-lg ml-3">Quay về danh sách</a>
             </div>
         </form>
@@ -81,48 +89,74 @@
 
 <script>
     $(document).ready(function() {
-        // Lấy dữ liệu thể loại từ API
-        $.get('http://localhost/webbangiay/api/type', function(data) {
-            data.forEach(type => {
-                $('#type_id').append(`<option value="${type.id}">${type.name}</option>`);
-            });
-        });
+    const shoeId = new URLSearchParams(window.location.search).get('id');  // Lấy ID từ URL
 
-        // Lấy dữ liệu thương hiệu từ API
-        $.get('http://localhost/webbangiay/api/brand', function(data) {
-            data.forEach(brand => {
-                $('#brand_id').append(`<option value="${brand.id}">${brand.name}</option>`);
-            });
-        });
+    // Nếu không có ID giày trong URL, không thực hiện gì cả
+    if (!shoeId) {
+        alert('ID giày không hợp lệ!');
+        return;
+    }
 
-        // Lấy dữ liệu chất liệu từ API
-        $.get('http://localhost/webbangiay/api/material', function(data) {
-            data.forEach(material => {
-                $('#material_id').append(`<option value="${material.id}">${material.name}</option>`);
-            });
-        });
-        $.get('http://localhost/webbangiay/api/manufacturer', function(data) {
-            data.forEach(manufacturer => {
-                $('#manufacturer_id').append(`<option value="${manufacturer.id}">${manufacturer.name}</option>`);
-            });
+    // Lấy thông tin giày theo ID từ API
+    $.get(`http://localhost/webbangiay/api/shoe/${shoeId}`, function(shoe) {
+        // Điền dữ liệu vào form
+        $('#title').val(shoe.title);
+        $('#price').val(shoe.price);
+        $('#description').val(shoe.description);
+        $('#type_id').val(shoe.type_id);  // Thể loại
+        $('#brand_id').val(shoe.brand_id);  // Thương hiệu
+        $('#material_id').val(shoe.material_id);  // Chất liệu
+        $('#manufacturer_id').val(shoe.manufacturer_id);  // Nhà sản xuất
+
+         // Nếu có hình ảnh, hiển thị ảnh hiện tại và lưu đường dẫn ảnh cũ
+         if (shoe.path_image) {
+            $('#image-preview').attr('src', shoe.path_image).show();
+           
+        }
+
+    
+    });
+
+    // Lấy dữ liệu thể loại từ API
+    $.get('http://localhost/webbangiay/api/type', function(data) {
+        data.forEach(type => {
+            $('#type_id').append(`<option value="${type.id}">${type.name}</option>`);
         });
     });
 
-    // Gửi form qua AJAX
+    // Lấy dữ liệu thương hiệu từ API
+    $.get('http://localhost/webbangiay/api/brand', function(data) {
+        data.forEach(brand => {
+            $('#brand_id').append(`<option value="${brand.id}">${brand.name}</option>`);
+        });
+    });
+
+    // Lấy dữ liệu chất liệu từ API
+    $.get('http://localhost/webbangiay/api/material', function(data) {
+        data.forEach(material => {
+            $('#material_id').append(`<option value="${material.id}">${material.name}</option>`);
+        });
+    });
+
+    // Lấy dữ liệu nhà sản xuất từ API
+    $.get('http://localhost/webbangiay/api/manufacturer', function(data) {
+        data.forEach(manufacturer => {
+            $('#manufacturer_id').append(`<option value="${manufacturer.id}">${manufacturer.name}</option>`);
+        });
+    });
+
+    // Xử lý submit form
     $("#product-form").submit(function(e) {
         e.preventDefault();  // Ngừng hành động mặc định của form
 
-        // Kiểm tra trường dữ liệu bắt buộc
+        // Kiểm tra các trường dữ liệu bắt buộc
         if (!$("#title").val() || !$("#description").val() || !$("#price").val()) {
             alert('Tên giày, mô tả và giá không được để trống.');
             return;
         }
 
-        // Tạo đối tượng FormData để gửi dữ liệu của form, bao gồm cả file ảnh
+        // Kiểm tra xem có ảnh mới không
         let formData = new FormData(this);
-        // Lấy ID giày từ URL
-        const shoeId = new URLSearchParams(window.location.search).get('id');
-       
         // Gửi yêu cầu AJAX
         $.ajax({
             url: `http://localhost/webbangiay/api/shoe/${shoeId}`, // Đảm bảo URL này là chính xác
@@ -131,14 +165,17 @@
             processData: false,  // Không xử lý dữ liệu tự động
             contentType: false,  // Không tự động đặt content-type
             success: function(response) {
-                alert("Chỉnh sửa thành công!");
-                console.log(shoeId);
-                //window.location.href = "index.php";  // Quay về trang danh sách
+                alert("Chỉnh sửa thành công!");  // Thông báo khi thành công
+                // Quay về danh sách giày sau khi thành công
+                window.location.href = "index.php";
             },
             error: function(xhr) {
+                alert("Có lỗi xảy ra khi chỉnh sửa giày!");  // Thông báo khi có lỗi
                 console.error("Lỗi khi sửa giày:", xhr.responseText);
-                alert("Có lỗi xảy ra khi thêm giày!");
             }
         });
     });
+});
+
+
 </script>

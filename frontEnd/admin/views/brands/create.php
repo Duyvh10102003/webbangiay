@@ -23,7 +23,7 @@
             <!-- Nút hành động -->
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-success btn-lg">Thêm</button>
-                <a href="index.php" class="btn btn-secondary btn-lg ml-3">Quay về danh sách</a>
+                <a href="brands.php" class="btn btn-secondary btn-lg ml-3">Quay về danh sách</a>
             </div>
         </form>
     </div>

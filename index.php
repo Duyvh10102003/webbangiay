@@ -24,8 +24,6 @@ if ($url[0] === 'api') {
             $apiController->register();
         }elseif ($url[1] === 'login' && $method === 'POST') {
             $apiController->login();
-        }elseif ($url[1] === 'logout' && $method === 'POST') {
-                $apiController->logout();
         } else {
             http_response_code(405);
             echo json_encode(['message' => 'Method Not Allowed']);
@@ -79,13 +77,18 @@ if ($url[0] === 'api') {
             default:
                 methodNotAllowed();
         }
-
         exit;
+
     } else {
         http_response_code(404);
-        echo json_encode(['message' => 'Controller not found']);
-        exit;
+        echo json_encode(['message' => 'Action not found']);
     }
+    exit;
+} else {
+    http_response_code(404);
+    echo json_encode(['message' => 'Controller not found']);
+    exit;
+}
 }
 
 // Helper for Method Not Allowed

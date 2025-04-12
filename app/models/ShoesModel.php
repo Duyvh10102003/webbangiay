@@ -89,7 +89,42 @@ class ShoesModel
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
-
+    // public function search($keyword)
+    // {
+    //     $stmt = $this->conn->prepare("SELECT * FROM shoes WHERE title LIKE :keyword");
+    //     $stmt->execute(['keyword' => '%' . $keyword . '%']);
+    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // }
+    public function search($keyword): array
+{
+    $query = "SELECT 
+                p.id, 
+                p.path_image, 
+                p.title, 
+                p.price, 
+                t.name AS type, 
+                b.name AS brand, 
+                m.name AS manufacturer, 
+                mat.name AS material, 
+                p.description
+              FROM {$this->table_name} p
+              LEFT JOIN types t ON p.type_id = t.id
+              LEFT JOIN brands b ON p.brand_id = b.id
+              LEFT JOIN manufacturers m ON p.manufacturer_id = m.id
+              LEFT JOIN materials mat ON p.material_id = mat.id
+              WHERE p.title LIKE :keyword 
+                 OR p.description LIKE :keyword 
+                 OR b.name LIKE :keyword 
+                 OR t.name LIKE :keyword 
+                 OR m.name LIKE :keyword 
+                 OR mat.name LIKE :keyword";
+    
+    $stmt = $this->conn->prepare($query);
+    $searchKeyword = '%' . $keyword . '%';
+    $stmt->bindParam(':keyword', $searchKeyword, PDO::PARAM_STR);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
     public function addShoe($id, $path_image, $title, $price, $type_id, $brand_id, $manufacturer_id, $material_id, $description)
     {
         $errors = [];
