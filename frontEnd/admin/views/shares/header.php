@@ -45,6 +45,7 @@
             <div id="sidebar-scrollbar" style="margin-top: 60px;">
                 <hr />
                 <nav class="iq-sidebar-menu">
+                    
                     <ul id="iq-sidebar-toggle" class="iq-menu">
                         <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/shoemanager/index.php">
                                 <i class="fa-solid fa-th-large"></i>
@@ -100,7 +101,7 @@
                             <a href="index.html" class="header-logo">
                                 <img src="../../assets/images/logo.png" class="img-fluid rounded-normal" alt="">
                                 <div class="logo-title">
-                                    <span class="text-primary text-uppercase">TVQ BOOKS</span>
+                                    <span class="text-primary text-uppercase">SPARK</span>
                                 </div>
                             </a>
                         </div>

@@ -1,6 +1,6 @@
 <?php include __DIR__ . '/../shares/header.php'; ?>
 
-<h1 class="text-center mb-4">Thêm Nguyên Liệu Mới</h1>
+<h1 class="text-center mb-4">Thêm nhà sản xuất Mới</h1>
 
 <hr />
 
@@ -13,7 +13,7 @@
                 <!-- Cột trái -->
                 <div class="col-md-6">
                     <div class="form-group mb-3">
-                        <label for="name" class="control-label">Tên Nguyên Liệu</label>
+                        <label for="name" class="control-label">Tên nhà sản xuất</label>
                         <input id="name" name="name" class="form-control" />
                         <span id="name-validation" class="text-danger"></span>
                     </div>
@@ -23,7 +23,7 @@
             <!-- Nút hành động -->
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-success btn-lg">Thêm</button>
-                <a href="materials.php" class="btn btn-secondary btn-lg ml-3">Quay về danh sách</a>
+                <a href="manufacturer.php" class="btn btn-secondary btn-lg ml-3">Quay về danh sách</a>
             </div>
         </form>
     </div>
@@ -38,24 +38,24 @@
 
             let brandName = $("#name").val().trim();
             if (!brandName) {
-                alert("Tên nguyên liệu không được để trống.");
+                alert("Tên nhà sản xuất  không được để trống.");
                 return;
             }
 
             let requestData = { name: brandName };
 
             $.ajax({
-                url: "http://localhost/webbangiay/api/material", 
+                url: "http://localhost/webbangiay/api/manufacturer", 
                 method: "POST",
                 contentType: "application/json", // Định dạng JSON
                 data: JSON.stringify(requestData), // Chuyển dữ liệu thành JSON
                 success: function(response) {
-                    alert("Thêm nguyên liệu thành công!");
-                    window.location.href = "http://localhost/webbangiay/frontEnd/admin/views/material/materials.php";  
+                    alert("Thêm nhà sản xuất  thành công!");
+                    window.location.href = "http://localhost/webbangiay/frontEnd/admin/views/manufacturer/manufacturer.php";  
                 },
                 error: function(xhr) {
-                    console.error("Lỗi khi thêm nguyê liệu:", xhr.responseText);
-                    alert("Có lỗi xảy ra khi thêm nguyên liệu!");
+                    console.error("Lỗi khi thêm nhà sản xuất :", xhr.responseText);
+                    alert("Có lỗi xảy ra khi thêm nhà sản xuất !");
                 }
             });
         });
