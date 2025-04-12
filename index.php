@@ -90,7 +90,6 @@ if ($url[0] === 'api') {
     echo json_encode(['message' => 'Controller not found']);
     exit;
 }
-}
 
 // Helper for Method Not Allowed
 function methodNotAllowed() {
