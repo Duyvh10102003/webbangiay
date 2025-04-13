@@ -54,7 +54,10 @@ if ($url[0] === 'api') {
             $controller->payOrder();
             exit;
         }
-
+if ($method === 'GET' && $actionParam === 'manageOrderAdmin') {
+            $controller->manageOrderAdmin();
+            exit;
+        }
         switch ($method) {
             case 'GET':
                 if (!$actionParam) {

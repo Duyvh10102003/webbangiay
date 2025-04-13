@@ -12,6 +12,18 @@ class OrderApiController
         $this->orderModel = new OrderModel($this->db);
     }
 
+    public function manageOrderAdmin()
+    {
+        header('Content-Type: application/json');
+        $order = $this->orderModel->manageOrder();
+
+        if ($order) {
+            echo json_encode($order);
+        } else {
+            http_response_code(404);
+            echo json_encode(['message' => 'Order not found']);
+        }
+    }
     // Lấy danh sách đơn hàng của một user
     public function index()
     {

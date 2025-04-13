@@ -63,6 +63,10 @@
                                 <i class="fa-solid fa-th-large"></i>
                                 Danh sách loại</a>
                         </li>
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/order/order.php">
+                                <i class="fa-solid fa-th-large"></i>
+                                Danh sách đơn đặt hàng</a>
+                        </li>
                         <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/user/index.php">
                         <i class="fa-solid fa-tags"></i> 
                                 Tài khoản</a>

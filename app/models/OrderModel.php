@@ -2,7 +2,7 @@
 class OrderModel
 {
     private $conn; // Biến lưu kết nối CSDL
-
+    private $table_name = "orders";
     // Hàm khởi tạo, nhận đối tượng kết nối từ Database
     public function __construct($db)
     {
@@ -80,5 +80,25 @@ class OrderModel
         $sql = "UPDATE orders SET status = 'completed' WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([$orderId]);
+    }
+    public function manageOrder()
+    {
+        $query = "SELECT 
+                asp.UserName, 
+                od.total_price, 
+                od.created_at, 
+                odt.product_id, 
+                odt.quantity, 
+                odt.price, 
+                od.status, 
+                sh.path_image
+            FROM {$this->table_name} od 
+            JOIN aspnetusers asp ON asp.Id = od.user_id
+            JOIN order_details odt ON od.id = odt.order_id 
+            JOIN shoes sh ON sh.id = odt.product_id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 }
