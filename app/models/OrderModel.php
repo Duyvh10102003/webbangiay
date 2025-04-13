@@ -85,18 +85,20 @@ class OrderModel
     public function manageOrder()
     {
         $query = "SELECT 
-    odt.order_id,
-    asp.UserName,
-    SUM(odt.quantity) AS total_quantity,
-    SUM(odt.price * odt.quantity) AS total_item_price,
-    MAX(od.total_price) AS total_price, 
-    MAX(od.created_at) AS created_at,
-    MAX(od.status) AS status
+        odt.order_id,
+        asp.UserName,
+        SUM(odt.quantity) AS total_quantity,
+        SUM(odt.price * odt.quantity) AS total_item_price,
+        MAX(od.total_price) AS total_price, 
+        MAX(od.created_at) AS created_at,
+        MAX(od.status) AS status
     FROM aspnetusers asp
     JOIN orders od ON asp.Id = od.user_id
     JOIN order_details odt ON od.id = odt.order_id
     JOIN shoes sh ON sh.id = odt.product_id
-    GROUP BY odt.order_id, asp.UserName";
+    GROUP BY odt.order_id, asp.UserName
+    ORDER BY odt.order_id DESC";
+
 
         $stmt = $this->conn->prepare($query);
         $stmt->execute();

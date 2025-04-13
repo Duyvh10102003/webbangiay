@@ -73,25 +73,41 @@ class OrderApiController
     }
 
     // POST: /order/pay
-    public function payOrder() {
-        // Lấy JSON từ request body
+    public function payOrder()
+    {
+        header('Content-Type: application/json');
         $data = json_decode(file_get_contents("php://input"), true);
         $orderId = $data['order_id'] ?? null;
 
         if (!$orderId) {
-            echo json_encode(['success' => false, 'message' => 'Order ID is required']);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Order ID is required'
+            ]);
             return;
         }
 
         $success = $this->orderModel->payOrder($orderId);
-        echo json_encode(['success' => $success]);
+
+        if ($success) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Đơn hàng đã được xác nhận thành công'
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Không thể xác nhận đơn hàng'
+            ]);
+        }
     }
+
     public function destroy($order_id)
-{
-    header('Content-Type: application/json');
+    {
+        header('Content-Type: application/json');
 
-    $result = $this->orderModel->deleteOrder($order_id);
+        $result = $this->orderModel->deleteOrder($order_id);
 
-    echo json_encode($result);
-}
+        echo json_encode($result);
+    }
 }
