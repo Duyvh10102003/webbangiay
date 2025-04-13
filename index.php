@@ -3,6 +3,7 @@ session_start();
 require_once 'app/models/ShoesModel.php';
 require_once 'app/controllers/ShoeApiController.php';
 require_once 'app/controllers/AuthApiController.php';
+require_once 'app/controllers/OrderApiController.php';
 // Start session
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
@@ -54,6 +55,7 @@ if ($url[0] === 'api') {
             $controller->payOrder();
             exit;
         }
+        
 if ($method === 'GET' && $actionParam === 'manageOrderAdmin') {
             $controller->manageOrderAdmin();
             exit;

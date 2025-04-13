@@ -1,6 +1,6 @@
 <?php
 require_once "app/models/OrderModel.php";
-
+require_once 'app/config/database.php';
 class OrderApiController
 {
     private $orderModel;
@@ -86,4 +86,12 @@ class OrderApiController
         $success = $this->orderModel->payOrder($orderId);
         echo json_encode(['success' => $success]);
     }
+    public function destroy($order_id)
+{
+    header('Content-Type: application/json');
+
+    $result = $this->orderModel->deleteOrder($order_id);
+
+    echo json_encode($result);
+}
 }
