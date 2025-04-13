@@ -61,16 +61,7 @@ function previewAudio(event) {
     }
 }
 
-// PRICE
-document.getElementById('priceInput').addEventListener('input', function () {
-    const price = this.value.replace(/[^0-9]/g, ''); // Loại bỏ ký tự không phải số
-    if (price) {
-        const formatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
-        document.getElementById('formattedPrice').innerText = formatted;
-    } else {
-        document.getElementById('formattedPrice').innerText = '';
-    }
-});
+
 
 /*------------------------------------------------  --------------------------------------------------*/
 /*------------------------------------------------  --------------------------------------------------*/
