@@ -105,6 +105,8 @@
                     order_id: orderId
                 }),
                 success: function(response) {
+                    console.log("response.success:", response.success);
+                    console.log("Phản hồi API:", response);
                     if (response.success) {
                         alert("Đơn hàng đã được xác nhận thành công!");
                         loadProducts();
@@ -121,27 +123,27 @@
     });
 
     // Xoá đơn hàng
-    $(document).on("click", ".delete-btn", function () {
-  let orderId = $(this).data("id");
-  if (confirm("Bạn có chắc chắn muốn xóa đơn hàng " + orderId)) {
-    $.ajax({
-      url: `http://localhost/webbangiay/api/order/${orderId}`,
-      method: "DELETE",
-      success: function (response) {
-        if (response.status === "success") {
-          alert(response.message);
-          $(this).closest("tr").remove(); // Xóa dòng đơn hàng trong bảng
-        } else {
-          alert("Không thể xóa đơn hàng: " + response.message);
+    $(document).on("click", ".delete-btn", function() {
+        let orderId = $(this).data("id");
+        if (confirm("Bạn có chắc chắn muốn xóa đơn hàng " + orderId)) {
+            $.ajax({
+                url: `http://localhost/webbangiay/api/order/${orderId}`,
+                method: "DELETE",
+                success: function(response) {
+                    if (response.status === "success") {
+                        alert(response.message);
+                        $(this).closest("tr").remove(); // Xóa dòng đơn hàng trong bảng
+                    } else {
+                        alert("Không thể xóa đơn hàng: " + response.message);
+                    }
+                },
+                error: function(xhr) {
+                    console.error("Lỗi khi xóa đơn hàng:", xhr.responseText);
+                    alert("Có lỗi xảy ra khi xóa đơn hàng!");
+                }
+            });
         }
-      },
-      error: function (xhr) {
-        console.error("Lỗi khi xóa đơn hàng:", xhr.responseText);
-        alert("Có lỗi xảy ra khi xóa đơn hàng!");
-      }
     });
-  }
-});
 
     $(document).on("click", ".order-toggle", function() {
         const orderId = $(this).data("id");
