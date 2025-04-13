@@ -133,6 +133,7 @@
                     if (response.status === "success") {
                         alert(response.message);
                         $(this).closest("tr").remove(); // Xóa dòng đơn hàng trong bảng
+                        loadProducts();
                     } else {
                         alert("Không thể xóa đơn hàng: " + response.message);
                     }
