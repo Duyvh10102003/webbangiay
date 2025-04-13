@@ -68,7 +68,7 @@
   });
 </script>
 
-      
+   
 
       <div
         class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
@@ -81,7 +81,13 @@
               </svg>
             </a>
           </li>
-
+          <li id="admin-icon" style="display: none;">
+            <a href="http://localhost/webbangiay/frontEnd/admin/views/shoemanager/index.php" class="rounded-circle bg-light p-2 mx-1">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <use xlink:href="#user"></use>
+              </svg>
+            </a>
+          </li>
           <!-- Form đăng nhập ẩn -->
           <div id="loginForm" class="login-container">
             <div class="login-box">
@@ -325,13 +331,9 @@
             localStorage.setItem("userInfo", JSON.stringify(data.user));
 
             updateUserUI(); // Cập nhật giao diện người dùng
-
+            window.location.reload();
             // Kiểm tra vai trò của user và chuyển hướng phù hợp
-            if (data.user.role === "Admin") {
-                window.location.href = "http://localhost/webbangiay/frontEnd/admin/views/shoemanager/index.php"; 
-            } else {
-                window.location.href = "index.php"; // Nếu là User, chuyển hướng index.php
-            }
+            
         }
     } catch (error) {
         console.error("Lỗi kết nối API:", error);
@@ -342,10 +344,12 @@
 
 
   function updateUserUI() {
+
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const userMenu = document.getElementById("user-menu");
+    const adminIcon = document.getElementById("admin-icon");
     if (userInfo) {
-      const userMenu = document.getElementById("user-menu");
+      
       userMenu.innerHTML = `
       <span class="mx-2">${userInfo.username}</span>
       <a href="#" class="rounded-circle bg-light p-2 mx-1" onclick="logoutUser()">
@@ -354,7 +358,12 @@
         </svg>
       </a>
     `;
+      if (userInfo.role === "Admin") {
+        adminIcon.style.display = "block";
+      }
     }
+
+
   }
 
   // Gọi hàm này khi trang load để kiểm tra xem user đã đăng nhập chưa
