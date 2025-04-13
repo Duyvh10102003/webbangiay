@@ -66,7 +66,7 @@
                                 <i class="fa-solid fa-user"></i>
                                 Tài khoản</a>
                         </li>
-                        <li><a id="manage" asp-area="Admin" asp-controller="OrderManagement" asp-action="ManageOrders">
+                        <li><a id="manage" href="http://localhost/webbangiay/frontEnd/admin/views/order/orders.php">
                                 <i class="fa-solid fa-box"></i>
                                 Đơn hàng</a>
                         </li>
