@@ -11,7 +11,7 @@ class UserModel
         $this->conn = $db;
     }
 
-    // 🟢 Đăng ký User + Gán Role
+    // Đăng ký User + Gán Role
     public function register($username, $email, $password, $role = "User")
     {
         // Kiểm tra dữ liệu đầu vào
@@ -84,7 +84,7 @@ class UserModel
         }
     }
 
-    // 🟢 Đăng nhập
+    // Đăng nhập
     public function login($email, $password)
     {
         $query = "SELECT u.Id, u.UserName, u.Email, u.PasswordHash, r.Name as Role 
@@ -110,24 +110,34 @@ class UserModel
         return false;
     }
 
-    // 🟢 Cập nhật thông tin người dùng
-    public function updateuser($userid, $username, $email)
-    {
-        if (empty($userid)) {
+    // Trong class UserModel
+public function updateuser($userid, $username, $email, $role = null)
+{
+    if (empty($userid)) {
         return ["error" => "ID người dùng không hợp lệ"];
-        }
+    }
 
-        // Chuẩn hóa dữ liệu
-        $normalizedUsername = strtoupper(trim($username));
-        $normalizedEmail = strtoupper(trim($email));
+    // Chuẩn hóa dữ liệu
+    $normalizedUsername = strtoupper(trim($username));
+    $normalizedEmail = strtoupper(trim($email));
 
-        // Cập nhật thông tin user
-        $query = "UPDATE $this->table_users 
+    // Kiểm tra user có tồn tại không
+    $query_check = "SELECT Id FROM $this->table_users WHERE Id = :id";
+    $stmt_check = $this->conn->prepare($query_check);
+    $stmt_check->bindParam(":id", $userid);
+    $stmt_check->execute();
+
+    if ($stmt_check->rowCount() == 0) {
+        return ["error" => "Người dùng không tồn tại"];
+    }
+
+    // Cập nhật thông tin user
+    $query = "UPDATE $this->table_users 
               SET UserName = :username, NormalizedUserName = :normalizedUsername, 
                   Email = :email, NormalizedEmail = :normalizedEmail 
               WHERE Id = :id";
 
-        try {
+    try {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $userid);
         $stmt->bindParam(":username", $username);
@@ -136,24 +146,57 @@ class UserModel
         $stmt->bindParam(":normalizedEmail", $normalizedEmail);
 
         if ($stmt->execute()) {
+            // Cập nhật role nếu có
+            if ($role) {
+                $normalizedRole = strtoupper($role);
+                // Kiểm tra role đã tồn tại chưa
+                $query_role = "SELECT Id FROM $this->table_roles WHERE NormalizedName = :role";
+                $stmt_role = $this->conn->prepare($query_role);
+                $stmt_role->bindParam(":role", $normalizedRole);
+                $stmt_role->execute();
+                $roleData = $stmt_role->fetch(PDO::FETCH_ASSOC);
+
+                if ($roleData) {
+                    $roleId = $roleData['Id'];
+                } else {
+                    // Nếu role chưa tồn tại, tạo mới
+                    $roleId = bin2hex(random_bytes(18));
+                    $query_insert_role = "INSERT INTO $this->table_roles (Id, Name, NormalizedName) VALUES (:id, :role, :normalizedRole)";
+                    $stmt_insert_role = $this->conn->prepare($query_insert_role);
+                    $stmt_insert_role->bindParam(":id", $roleId);
+                    $stmt_insert_role->bindParam(":role", $role);
+                    $stmt_insert_role->bindParam(":normalizedRole", $normalizedRole);
+                    $stmt_insert_role->execute();
+                }
+
+                // Xóa role cũ và thêm role mới (đảm bảo chỉ có 1 role/user)
+                $query_delete_role = "DELETE FROM $this->table_user_roles WHERE UserId = :userId";
+                $stmt_delete_role = $this->conn->prepare($query_delete_role);
+                $stmt_delete_role->bindParam(":userId", $userid);
+                $stmt_delete_role->execute();
+
+                $query_update_role = "INSERT INTO $this->table_user_roles (UserId, RoleId) VALUES (:userId, :roleId)";
+                $stmt_update_role = $this->conn->prepare($query_update_role);
+                $stmt_update_role->bindParam(":userId", $userid);
+                $stmt_update_role->bindParam(":roleId", $roleId);
+                $stmt_update_role->execute();
+            }
             return ["message" => "Cập nhật thành công"];
         } else {
             return ["error" => "Cập nhật thất bại"];
         }
-        } catch (PDOException $e) {
-            return ["error" => "Lỗi SQL: " . $e->getMessage()];
-        }
+    } catch (PDOException $e) {
+        return ["error" => "Lỗi SQL: " . $e->getMessage()];
     }
+}
 
-    // 🟢 Xóa user
+    // Xóa user
     public function deleteuser ($userid)
     {
-        // Kiểm tra dữ liệu đầu vào
         if (empty($userid)) {
             return ["error" => "Vui lòng nhập đầy đủ thông tin"];
         }
 
-        // Xóa user
         $query = "DELETE FROM $this->table_users WHERE Id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $userid);
@@ -164,7 +207,7 @@ class UserModel
             return ["error" => "Xóa thất bại"];
         }
     }
-    // 🟢 Lấy danh sách user
+    // Lấy danh sách user
     public function getAllUsers()
     {
         $query = "SELECT u.Id, u.UserName, u.Email, r.Name as Role 
@@ -177,7 +220,7 @@ class UserModel
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    // 🟢 Lấy thông tin user theo ID
+    // Lấy thông tin user theo ID
     public function getUserById($userid)
     {
         $query = "SELECT u.Id, u.UserName, u.Email, r.Name as Role 
@@ -190,6 +233,6 @@ class UserModel
         $stmt->bindParam(":id", $userid);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 }

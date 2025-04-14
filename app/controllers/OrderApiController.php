@@ -1,6 +1,6 @@
 <?php
 require_once "app/models/OrderModel.php";
-
+require_once 'app/config/database.php';
 class OrderApiController
 {
     private $orderModel;
@@ -12,6 +12,18 @@ class OrderApiController
         $this->orderModel = new OrderModel($this->db);
     }
 
+    public function manageOrderAdmin()
+    {
+        header('Content-Type: application/json');
+        $order = $this->orderModel->manageOrder();
+
+        if ($order) {
+            echo json_encode($order);
+        } else {
+            http_response_code(404);
+            echo json_encode(['message' => 'Order not found']);
+        }
+    }
     // Lấy danh sách đơn hàng của một user
     public function index()
     {
@@ -56,6 +68,45 @@ class OrderApiController
         if ($result["status"] === "success") {
             $_SESSION['cart'] = []; // Xóa giỏ hàng sau khi đặt hàng thành công
         }
+
+        echo json_encode($result);
+    }
+
+    // POST: /order/pay
+    public function payOrder()
+    {
+        header('Content-Type: application/json');
+        $data = json_decode(file_get_contents("php://input"), true);
+        $orderId = $data['order_id'] ?? null;
+
+        if (!$orderId) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Order ID is required'
+            ]);
+            return;
+        }
+
+        $success = $this->orderModel->payOrder($orderId);
+
+        if ($success) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Đơn hàng đã được xác nhận thành công'
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Không thể xác nhận đơn hàng'
+            ]);
+        }
+    }
+
+    public function destroy($order_id)
+    {
+        header('Content-Type: application/json');
+
+        $result = $this->orderModel->deleteOrder($order_id);
 
         echo json_encode($result);
     }

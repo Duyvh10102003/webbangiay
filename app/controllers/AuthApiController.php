@@ -15,7 +15,7 @@ class AuthApiController
         $this->userModel = new UserModel($this->db);
     }
 
-    // 🟢 Đăng ký User
+    //  Đăng ký User
     public function register()
     {
         header("Content-Type: application/json");
@@ -26,13 +26,13 @@ class AuthApiController
             return;
         }
 
-        $role = $data['role'] ?? 'User'; // Mặc định là User nếu không truyền role
+        $role = $data['role'] ?? 'User';
         $result = $this->userModel->register($data['username'], $data['email'], $data['password'], $role);
 
         echo json_encode($result);
     }
 
-    // 🟢 Đăng nhập
+    //  Đăng nhập
     public function login()
     {
         header("Content-Type: application/json");
@@ -64,7 +64,7 @@ class AuthApiController
         
     }
 
-    // 🟢 Lấy thông tin người dùng theo ID
+    //  Lấy thông tin người dùng theo ID
     public function show($userId)
     {
         
@@ -76,21 +76,27 @@ class AuthApiController
             echo json_encode(["error" => "Người dùng không tồn tại"]);
         }
     }
-    // 🟢 Cập nhật thông tin người dùng
+
+    //  Cập nhật thông tin người dùng
     public function update($userId)
     {
         header("Content-Type: application/json");
         $data = json_decode(file_get_contents("php://input"), true);
 
-        if (empty($userId) || empty($data)) {
-            return;
-        }
+    if (empty($userId) || empty($data)) {
+        echo json_encode(["error" => "Dữ liệu không hợp lệ"]);
+        return;
+    }
 
-        $result = $this->userModel->updateuser($userId, $data['username'] ?? null, $data['email'] ?? null);
-
+    $result = $this->userModel->updateuser(
+        $userId,
+        $data['username'] ?? null,
+        $data['email'] ?? null,
+        $data['role'] ?? null
+    );
         echo json_encode($result);
     }
-    // 🟢 Xóa người dùng
+    //  Xóa người dùng
     public function destroy($userId)
     {
         header("Content-Type: application/json");
@@ -98,7 +104,7 @@ class AuthApiController
 
         echo json_encode($result);
     }
-    // 🟢 Lấy danh sách người dùng
+    //  Lấy danh sách người dùng
     public function index()
     {
         header("Content-Type: application/json");

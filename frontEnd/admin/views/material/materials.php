@@ -45,9 +45,14 @@
 
                
     <script>
+<<<<<<< HEAD
   const API_URL = "http://localhost/webbangiay/api/material"; // Địa chỉ API để lấy danh sách chất liệu
 
 // Load danh sách chất liệu
+=======
+  const API_URL = "http://localhost/webbangiay/api/material"; 
+
+>>>>>>> master
 function loadProducts() {
   $.ajax({
     url: API_URL,
@@ -77,15 +82,18 @@ function loadProducts() {
 }
 
 
+<<<<<<< HEAD
 
 // Load chất liệu khi trang được tải
+=======
+>>>>>>> master
 $(document).ready(function() {
   loadProducts();
 });
 //
 $(document).on("click", ".edit-btn", function() {
-    let productId = $(this).data("id");  // Lấy ID giày cần chỉnh sửa
-    window.location.href = `edit.php?id=${productId}`;  // Chuyển hướng đến trang edit.php
+    let productId = $(this).data("id");  
+    window.location.href = `edit.php?id=${productId}`;  
 });
 
 // Xóa chất liệu
@@ -93,11 +101,16 @@ $(document).on("click", ".delete-btn", function() {
     let productId = $(this).data("id");
     if (confirm("Bạn có chắc chắn muốn xóa chất liệu?")) {
         $.ajax({
-            url: `${API_URL}/${productId}`, // Gửi yêu cầu DELETE đến API
+            url: `${API_URL}/${productId}`, 
             method: "DELETE",
             success: function(response) {
+<<<<<<< HEAD
                 alert("Xóa chất liệu thành công!");
                 loadProducts(); // Tải lại danh sách chất liệu
+=======
+                alert("Xóa thành công!");
+                loadProducts(); 
+>>>>>>> master
             },
             error: function(xhr) {
                 console.error("Lỗi khi :", xhr.responseText);
