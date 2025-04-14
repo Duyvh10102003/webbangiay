@@ -39,7 +39,7 @@ git clone https://github.com/Duyvh10102003/webbangiay.git
 ```
 
 ### Bước 2: Cài Đặt Máy Chủ Web
-
+n
 Chạy máy chủ web như XAMPP, WAMP hoặc MAMP để chạy dự án PHP của bạn.
 
 ### Bước 3: Cấu Hình Cơ Sở Dữ Liệu
