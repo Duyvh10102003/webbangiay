@@ -175,17 +175,58 @@ $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 
     // Xử lý khi người dùng chọn ngân hàng
     document.getElementById("btn-bank").onclick = () => {
-        qrImage.src = "../images/bank.jpg"; // đường dẫn ảnh QR ngân hàng
-        qrContainer.classList.remove("d-none");
-        confirmBtn.classList.remove("d-none");
+        // Generate QR code for bank payment
+        generateQRCode('bank');
     };
 
     // Xử lý khi người dùng chọn momo
     document.getElementById("btn-momo").onclick = () => {
-        qrImage.src = "../images/momo.jpg"; // đường dẫn ảnh QR Momo
-        qrContainer.classList.remove("d-none");
-        confirmBtn.classList.remove("d-none");
+        // Generate QR code for momo payment
+        generateQRCode('momo');
     };
+
+    // Function to generate QR code
+    function generateQRCode(paymentMethod) {
+        const qrImage = document.getElementById("qr-image");
+        const qrContainer = document.getElementById("qr-image-container");
+        const confirmBtn = document.getElementById("btn-confirm-after-payment");
+        
+        // Show loading state
+        qrContainer.classList.remove("d-none");
+        qrImage.src = "../images/loading.gif"; // You can add a loading image
+        confirmBtn.classList.add("d-none");
+        
+        // Get total amount
+        const totalAmount = parseInt(totalPriceElement.textContent.replace(/\./g, ''));
+        
+        // Call API to generate QR code
+        fetch("http://localhost/webbangiay/app/controllers/QRCodeAPI.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                amount: totalAmount,
+                paymentMethod: paymentMethod
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                // Display QR code
+                qrImage.src = data.qrCode;
+                confirmBtn.classList.remove("d-none");
+            } else {
+                alert("Có lỗi xảy ra khi tạo mã QR: " + data.message);
+                qrContainer.classList.add("d-none");
+            }
+        })
+        .catch(error => {
+            console.error("Lỗi khi tạo mã QR:", error);
+            alert("Có lỗi xảy ra khi tạo mã QR. Vui lòng thử lại sau.");
+            qrContainer.classList.add("d-none");
+        });
+    }
 
     // Sau khi người dùng đã thanh toán
     confirmBtn.onclick = function () {
