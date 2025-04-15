@@ -3,13 +3,14 @@ session_start();
 require_once 'app/models/ShoesModel.php';
 require_once 'app/controllers/ShoeApiController.php';
 require_once 'app/controllers/AuthApiController.php';
+require_once 'app/controllers/OrderApiController.php';
 // Start session
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
 $url = filter_var($url, FILTER_SANITIZE_URL);
 $url = explode('/', $url);
 // Kiểm tra phần đầu tiên của URL để xác định controller
-$controllerName = isset($url[0]) && $url[0] != '' ? ucfirst($url[0]) . 'Controller' :'DefaultController';
+$controllerName = isset($url[0]) && $url[0] != '' ? ucfirst($url[0]) . 'Controller' : 'DefaultController';
 // Kiểm tra phần thứ hai của URL để xác định action
 $action = isset($url[1]) && $url[1] != '' ? $url[1] : 'index';
 
@@ -17,21 +18,20 @@ $action = isset($url[1]) && $url[1] != '' ? $url[1] : 'index';
 if ($url[0] === 'api') {
     $method = $_SERVER['REQUEST_METHOD'];
 
-    if ($url[1] === 'register' || $url[1] === 'login'|| $url[1] === 'logout') {
+    if ($url[1] === 'register' || $url[1] === 'login' || $url[1] === 'logout') {
         $apiController = new AuthApiController();
 
         if ($url[1] === 'register' && $method === 'POST') {
             $apiController->register();
-        }elseif ($url[1] === 'login' && $method === 'POST') {
+        } elseif ($url[1] === 'login' && $method === 'POST') {
             $apiController->login();
-        
         } else {
             http_response_code(405);
             echo json_encode(['message' => 'Method Not Allowed']);
         }
         exit;
     }
-    
+
     // Định tuyến API khác (ShoeApiController, UserApiController,...)
     $apiControllerName = ucfirst($url[1]) . 'ApiController';
     $controllerPath = 'app/controllers/' . $apiControllerName . '.php';
@@ -55,6 +55,10 @@ if ($url[0] === 'api') {
             exit;
         }
 
+        if ($method === 'GET' && $actionParam === 'manageOrderAdmin') {
+            $controller->manageOrderAdmin();
+            exit;
+        }
         switch ($method) {
             case 'GET':
                 if (!$actionParam) {
@@ -84,7 +88,6 @@ if ($url[0] === 'api') {
                 methodNotAllowed();
         }
         exit;
-
     } else {
         http_response_code(404);
         echo json_encode(['message' => 'Action not found']);
@@ -97,7 +100,8 @@ if ($url[0] === 'api') {
 }
 
 // Helper for Method Not Allowed
-function methodNotAllowed() {
+function methodNotAllowed()
+{
     http_response_code(405);
     echo json_encode(['message' => 'Method Not Allowed']);
 }

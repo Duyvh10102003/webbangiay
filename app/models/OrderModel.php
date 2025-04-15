@@ -2,7 +2,7 @@
 class OrderModel
 {
     private $conn; // Biến lưu kết nối CSDL
-
+    private $table_name = "orders";
     // Hàm khởi tạo, nhận đối tượng kết nối từ Database
     public function __construct($db)
     {
@@ -76,9 +76,51 @@ class OrderModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function payOrder($orderId) {
+    public function payOrder($orderId)
+    {
         $sql = "UPDATE orders SET status = 'completed' WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([$orderId]);
+    }
+    public function manageOrder()
+    {
+        $query = "SELECT 
+        odt.order_id,
+        asp.UserName,
+        SUM(odt.quantity) AS total_quantity,
+        SUM(odt.price * odt.quantity) AS total_item_price,
+        MAX(od.total_price) AS total_price, 
+        MAX(od.created_at) AS created_at,
+        MAX(od.status) AS status
+    FROM aspnetusers asp
+    JOIN orders od ON asp.Id = od.user_id
+    JOIN order_details odt ON od.id = odt.order_id
+    JOIN shoes sh ON sh.id = odt.product_id
+    GROUP BY odt.order_id, asp.UserName
+    ORDER BY odt.order_id DESC";
+
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+    public function deleteOrder($order_id)
+    {
+        // Xóa chi tiết đơn hàng
+        $stmt = $this->conn->prepare("DELETE FROM order_details WHERE order_id = ?");
+        $stmt->execute([$order_id]);
+        $detailsDeleted = $stmt->rowCount();
+
+        // Xóa đơn hàng chính
+        $stmt = $this->conn->prepare("DELETE FROM orders WHERE id = ?");
+        $stmt->execute([$order_id]);
+        $orderDeleted = $stmt->rowCount();
+
+        return [
+            "status" => ($orderDeleted > 0 ? "success" : "error"),
+            "message" => $orderDeleted > 0 ? "Đơn hàng đã được xóa" : "Không tìm thấy đơn hàng để xóa",
+            "details_deleted" => $detailsDeleted,
+            "orders_deleted" => $orderDeleted
+        ];
     }
 }

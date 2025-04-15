@@ -82,92 +82,144 @@ $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
             <button type="submit" class="btn btn-success w-100">Confirm Order</button>
         </form>
     </div>
+    <!-- Modal Lựa chọn phương thức thanh toán -->
+    <div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="qrModalLabel">Chọn phương thức thanh toán</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body text-center">
+                    
+                    <!-- Lựa chọn phương thức -->
+                    <div class="mb-3">
+                        <button class="btn btn-outline-primary me-2" id="btn-bank">Ngân hàng</button>
+                        <button class="btn btn-outline-warning" id="btn-momo">Momo</button>
+                    </div>
+
+                    <!-- QR Code sẽ thay đổi -->
+                    <div id="qr-image-container" class="mb-3 d-none">
+                        <img id="qr-image" src="" alt="QR Code Thanh toán" class="img-fluid" style="max-height: 300px;">
+                    </div>
+                    <h3 class="text-danger fs-5 mb-3">
+                        Vui lòng nhập đầy đủ họ tên và số điện thoại vào phần nội dung chuyển khoản để chúng tôi liên hệ giao hàng.
+                    </h3>
+                    <!-- Nút xác nhận thanh toán -->
+                    <button type="button" class="btn btn-success w-100 d-none" id="btn-confirm-after-payment">Tôi đã thanh toán</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            
+
             // Lấy user_id từ localStorage
-const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-const user_id = userInfo.id;
-document.getElementById("user_Id").value = user_id;
-console.log("User ID từ localStorage:", localStorage.getItem("userInfo"));
+            const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+            const user_id = userInfo.id;
+            document.getElementById("user_Id").value = user_id;
+            console.log("User ID từ localStorage:", localStorage.getItem("userInfo"));
 
-// Lấy giỏ hàng từ localStorage
-const cartObject = JSON.parse(localStorage.getItem("cart")) || {};
-const orderDetails = document.getElementById("order-details");
-const totalPriceElement = document.getElementById("total-price");
-let total = 0;
+            // Lấy giỏ hàng từ localStorage
+            const cartObject = JSON.parse(localStorage.getItem("cart")) || {};
+            const orderDetails = document.getElementById("order-details");
+            const totalPriceElement = document.getElementById("total-price");
+            let total = 0;
 
-// Chuyển đổi object -> array và lọc theo user_id
-const cartArray = Object.keys(cartObject)
-    .filter(cartUserId => cartUserId === user_id)  // Lọc theo user_id
-    .map(cartUserId => {
-        return Object.keys(cartObject[cartUserId]).map(product_id => ({
-            user_id: cartUserId,
-            product_id: product_id,
-            quantity: parseInt(cartObject[cartUserId][product_id].quantity, 10),
-            price: parseInt(cartObject[cartUserId][product_id].price, 10)
-        }));
-    }).flat();
+            // Chuyển đổi object -> array và lọc theo user_id
+            const cartArray = Object.keys(cartObject)
+                .filter(cartUserId => cartUserId === user_id) // Lọc theo user_id
+                .map(cartUserId => {
+                    return Object.keys(cartObject[cartUserId]).map(product_id => ({
+                        user_id: cartUserId,
+                        product_id: product_id,
+                        quantity: parseInt(cartObject[cartUserId][product_id].quantity, 10),
+                        price: parseInt(cartObject[cartUserId][product_id].price, 10)
+                    }));
+                }).flat();
 
-console.log("Giỏ hàng sau khi chuyển đổi:", cartArray);
+            console.log("Giỏ hàng sau khi chuyển đổi:", cartArray);
 
-// Hiển thị giỏ hàng trong bảng HTML
-cartArray.forEach(product => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
+            // Hiển thị giỏ hàng trong bảng HTML
+            cartArray.forEach(product => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
         <td>${product.product_id}</td>
         <td>${product.quantity}</td>
         <td>${product.price.toLocaleString('vi-VN')} VND</td>
         <td>${(product.quantity * product.price).toLocaleString('vi-VN')} VND</td>
     `;
-    orderDetails.appendChild(row);
-    total += product.quantity * product.price;
-});
+                orderDetails.appendChild(row);
+                total += product.quantity * product.price;
+            });
 
-// Hiển thị tổng giá trong phần tử tổng giá
-totalPriceElement.textContent = total.toLocaleString('vi-VN');
+            // Hiển thị tổng giá trong phần tử tổng giá
+            totalPriceElement.textContent = total.toLocaleString('vi-VN');
 
 
             // Xử lý khi nhấn nút "Confirm Order"
             document.getElementById("order-form").addEventListener("submit", function(event) {
-                event.preventDefault();
+    event.preventDefault();
+    
+    // Hiển thị modal chọn phương thức thanh toán
+    const qrModal = new bootstrap.Modal(document.getElementById('qrModal'));
+    qrModal.show();
 
-                const orderData = {
-                    user_id: user_id,
-                    cart: cartArray
-                };
+    const qrImage = document.getElementById("qr-image");
+    const qrContainer = document.getElementById("qr-image-container");
+    const confirmBtn = document.getElementById("btn-confirm-after-payment");
 
-                console.log("Dữ liệu gửi lên API:", JSON.stringify(orderData));
+    // Xử lý khi người dùng chọn ngân hàng
+    document.getElementById("btn-bank").onclick = () => {
+        qrImage.src = "../images/bank.jpg"; // đường dẫn ảnh QR ngân hàng
+        qrContainer.classList.remove("d-none");
+        confirmBtn.classList.remove("d-none");
+    };
 
-                fetch("http://localhost/webbangiay/api/order", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(orderData)
-                    })
-                    .then(response => response.text()) // Đọc dưới dạng text trước khi parse JSON
-                    .then(data => {
-                        console.log("Phản hồi từ API:", data);
-                        try {
-                            const jsonData = JSON.parse(data);
-                            if (jsonData.status === "success") {
-                                alert("Đặt hàng thành công!");
-                                localStorage.removeItem("cart");
-                                window.location.href = "index.php";
-                            } else {
-                                alert("Có lỗi xảy ra khi đặt hàng: " + jsonData.message);
-                            }
-                        } catch (error) {
-                            console.error("Lỗi phân tích JSON:", error);
-                        }
-                    })
-                    .catch(error => console.error("Lỗi gửi đơn hàng:", error));
-            });
+    // Xử lý khi người dùng chọn momo
+    document.getElementById("btn-momo").onclick = () => {
+        qrImage.src = "../images/momo.jpg"; // đường dẫn ảnh QR Momo
+        qrContainer.classList.remove("d-none");
+        confirmBtn.classList.remove("d-none");
+    };
+
+    // Sau khi người dùng đã thanh toán
+    confirmBtn.onclick = function () {
+        const orderData = {
+            user_id: user_id,
+            cart: cartArray
+        };
+
+        fetch("http://localhost/webbangiay/api/order", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(orderData)
+        })
+        .then(response => response.text())
+        .then(data => {
+            try {
+                const jsonData = JSON.parse(data);
+                if (jsonData.status === "success") {
+                    alert("Đặt hàng thành công!");
+                    localStorage.removeItem("cart");
+                    window.location.href = "index.php";
+                } else {
+                    alert("Có lỗi xảy ra khi đặt hàng: " + jsonData.message);
+                }
+            } catch (error) {
+                console.error("Lỗi phân tích JSON:", error);
+            }
+        })
+        .catch(error => console.error("Lỗi gửi đơn hàng:", error));
+    };
+});
+
         });
     </script>
     <?php
