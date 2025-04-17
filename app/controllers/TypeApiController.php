@@ -41,11 +41,11 @@ class TypeApiController
     {
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents("php://input"), true);
-        
+
         $name = $data['name'];
-        
+
         $result = $this->typeModel->addType($name);
-        
+
         if (is_array($result)) {
             http_response_code(400);
             echo json_encode(['errors' => $result]);
@@ -62,10 +62,9 @@ class TypeApiController
         $data = json_decode(file_get_contents("php://input"), true);
 
         $name = $data['name'];
-        
 
         $result = $this->typeModel->updateType($id, $name);
-        
+
         if ($result) {
             echo json_encode(['message' => 'Type updated successfully']);
         } else {
@@ -79,7 +78,7 @@ class TypeApiController
     {
         header('Content-Type: application/json');
         $result = $this->typeModel->deleteType($id);
-        
+
         if ($result) {
             echo json_encode(['message' => 'Type deleted successfully']);
         } else {
@@ -88,4 +87,3 @@ class TypeApiController
         }
     }
 }
-?>
