@@ -25,7 +25,8 @@ class ShoesModel
                 LEFT JOIN types t ON p.type_id = t.id
                 LEFT JOIN brands b ON p.brand_id = b.id
                 LEFT JOIN manufacturers m ON p.manufacturer_id = m.id
-                LEFT JOIN materials mat ON p.material_id = mat.id;";
+                LEFT JOIN materials mat ON p.material_id = mat.id
+                ORDER BY id DESC;";
 
         $stmt = $this->conn->prepare($query);
         $stmt->execute();

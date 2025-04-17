@@ -40,7 +40,7 @@ if ($url[0] === 'api') {
         require_once $controllerPath;
         $controller = new $apiControllerName();
 
-        $resource = $url[1]; // e.g., "shoes"
+        //$resource = $url[1]; // e.g., "shoes"
         $actionParam = $url[2] ?? null;
 
         // Handle search via query param
